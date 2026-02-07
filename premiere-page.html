@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Emma & David</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracotta: #b05d3e;
+            --paper: #fdfcfb;
+            --text: #4a3f39;
+            --bg: #f2ede9;
+            --gold: #d4af37;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body, html { 
+            margin: 0; padding: 0; 
+            background-color: var(--bg); 
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        #petal-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 1000;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px; /* Plus d'espace entre les blocs */
+        }
+
+        /* --- Enveloppe XXL Sculptée --- */
+        .envelope-container {
+            width: 100%;
+            perspective: 1000px;
+        }
+
+        .envelope-pochette {
+            position: relative;
+            width: 100%;
+            height: 180px; /* Enveloppes bcp plus grosses */
+            background-color: var(--terracotta);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .envelope-pochette span {
+            color: white;
+            font-family: 'Great Vibes';
+            font-size: 3.8rem; /* Titre géant */
+            text-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .mini-seal {
+            position: absolute; bottom: 12px;
+            width: 50px; height: 50px;
+            background: radial-gradient(circle, #f0d997 0%, #b08d26 100%);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-family: 'Great Vibes'; font-size: 1.1rem;
+            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-pochette:hover .mini-seal {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* --- Animation Section Papier --- */
+        .paper-section {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: var(--paper);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            width: 96%;
+            margin: -25px auto 0;
+            transition: max-height 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.8s ease, 
+                        transform 0.8s ease;
+            transform: translateY(-20px);
+            text-align: center;
+            z-index: 5;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .paper-section.active {
+            max-height: 2000px;
+            opacity: 1;
+            transform: translateY(0);
+            padding: 80px 25px 50px;
+            margin-bottom: 40px;
+            border-bottom: 3px solid var(--terracotta);
+        }
+
+        /* --- Typo Contenu --- */
+        .title-card { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--terracotta); margin-bottom: 20px; }
+        .details { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; line-height: 1.7; color: var(--text); padding: 0 10px; }
+        .highlight { font-weight: 700; color: var(--terracotta); letter-spacing: 3px; text-transform: uppercase; font-size: 1.1rem; display: block; margin: 25px 0; }
+        
+        .waze-btn {
+            display: inline-block; margin-top: 30px; padding: 18px 40px;
+            border: 1.5px solid var(--terracotta); color: var(--terracotta);
+            text-decoration: none; font-size: 0.9rem; letter-spacing: 3px;
+            text-transform: uppercase; font-weight: 600; transition: 0.3s;
+        }
+
+        .waze-btn:active { background: var(--terracotta); color: white; }
+
+        /* --- RSVP --- */
+        .rsvp-form { text-align: left; padding: 0 10px; }
+        .rsvp-form label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #999; display: block; margin-top: 35px; }
+        input { 
+            width: 100%; border: none; border-bottom: 1px solid #ddd; 
+            padding: 15px 0; font-family: 'Cormorant Garamond'; 
+            font-size: 1.6rem; outline: none; background: transparent;
+        }
+        
+        .conditional { max-height: 0; overflow: hidden; opacity: 0; transition: 0.5s ease; }
+        .conditional.show { max-height: 150px; opacity: 1; margin-top: 20px; }
+
+        .submit-btn { 
+            width: 100%; background: var(--terracotta); color: white; 
+            border: none; padding: 22px; margin-top: 50px; 
+            text-transform: uppercase; letter-spacing: 5px; 
+            font-size: 1.1rem; font-weight: 700; cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="petal-canvas"></canvas>
+
+    <div class="main-container">
+
+        <div class="envelope-container">
+            <div class="envelope-pochette" onclick="toggleSection('sec-mairie')">
+                <span>Mairie</span>
+                <div class="mini-seal">E&D</div>
+            </div>
+            <div id="sec-mairie" class="paper-section">
+                <h2 class="title-card">Mairie</h2>
+                <div class="details">
+                    Nous serions ravis de vous compter parmi nous pour célébrer notre union civile.
+                    <span class="highlight">Jeudi 3 septembre • 15:30</span>
+                    <strong>Mairie de Neuilly sur Seine</strong><br>
+                    96 Av. Achille Peretti
+                </div>
+                <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="waze-btn" target="_blank">Waze Mairie</a>
+                <div style="margin: 50px auto; width: 60px; height: 1px; background: var(--terracotta); opacity: 0.2;"></div>
+                <div class="details">Suivie du Héné à 17H30 au ACCIL Rooftop</div>
+                <a href="https://waze.com/ul?q=63+Rue+Louis+Rouquier+Levallois" class="waze-btn" target="_blank">Waze Rooftop</a>
+            </div>
+        </div>
+
+        <div class="envelope-container">
+            <div class="envelope-pochette" onclick="toggleSection('sec-houppa')">
+                <span>Houppa</span>
+                <div class="mini-seal">E&D</div>
+            </div>
+            <div id="sec-houppa" class="paper-section">
+                <h2 class="title-card">Houppa</h2>
+                <div class="details">
+                    La cérémonie religieuse sera célébrée au
+                    <span class="highlight">Dimanche 18 Octobre • 17:00</span>
+                    <strong>Grand Hôtel Intercontinental</strong><br>
+                    2 rue Scribe, Paris Opéra
+                </div>
+                <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="waze-btn" target="_blank">Itinéraire Waze</a>
+            </div>
+        </div>
+
+        <div class="envelope-container">
+            <div class="envelope-pochette" onclick="toggleSection('sec-reponse')">
+                <span>Réponse</span>
+                <div class="mini-seal">E&D</div>
+            </div>
+            <div id="sec-reponse" class="paper-section">
+                <h2 class="title-card">Réponse</h2>
+                <form class="rsvp-form" onsubmit="event.preventDefault();">
+                    <label>Nom & Prénom</label>
+                    <input type="text" placeholder="Écrivez ici..." required>
+                    
+                    <label>Présent à la Mairie ?</label>
+                    <div style="font-size: 1.3rem; display: flex; gap: 40px; margin-top: 20px;">
+                        <label><input type="radio" name="m" onclick="toggleBareme('m-bareme', true)"> OUI</label>
+                        <label><input type="radio" name="m" onclick="toggleBareme('m-bareme', false)"> NON</label>
+                    </div>
+                    <div id="m-bareme" class="conditional">
+                        <label>Nombre de personnes</label>
+                        <input type="number" min="1" placeholder="Indiquez le nombre">
+                    </div>
+
+                    <label>Présent à la Houppa ?</label>
+                    <div style="font-size: 1.3rem; display: flex; gap: 40px; margin-top: 20px;">
+                        <label><input type="radio" name="h" onclick="toggleBareme('h-bareme', true)"> OUI</label>
+                        <label><input type="radio" name="h" onclick="toggleBareme('h-bareme', false)"> NON</label>
+                    </div>
+                    <div id="h-bareme" class="conditional">
+                        <label>Nombre de personnes</label>
+                        <input type="number" min="1" placeholder="Indiquez le nombre">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Confirmer ma présence</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            // On laisse les autres ouvertes comme demandé précédemment, 
+            // mais on anime la nouvelle avec un scroll fluide ciblé
+            section.classList.add('active');
+            setTimeout(() => {
+                const yOffset = -50; 
+                const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }, 400);
+        }
+
+        function toggleBareme(id, show) {
+            const el = document.getElementById(id);
+            show ? el.classList.add('show') : el.classList.remove('show');
+        }
+
+        const canvas = document.getElementById('petal-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, petals = [];
+
+        function setCanvasSize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        class Petal {
+            constructor() { this.reset(); this.y = Math.random() * height; }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = -20;
+                this.size = Math.random() * 8 + 5;
+                this.speed = Math.random() * 1.2 + 0.5;
+                this.angle = Math.random() * 360;
+                this.spin = Math.random() * 1.5 - 0.75;
+            }
+            update() {
+                this.y += this.speed;
+                this.angle += this.spin;
+                this.x += Math.sin(this.y / 50) * 0.8;
+                if (this.y > height) this.reset();
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle * Math.PI / 180);
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size / 2, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = 'rgba(252, 228, 236, 0.8)';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            petals.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', setCanvasSize);
+        setCanvasSize();
+        for (let i = 0; i < 35; i++) petals.push(new Petal());
+        animate();
+    </script>
+</body>
+</html>
