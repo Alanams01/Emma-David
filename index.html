@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mariage - Emma & David</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --terracotta: #b05d3e;
+            --terracotta-dark: #8c4a31;
+            --paper: #fdfcfb;
+            --bg-color: #f2ede9;
+            --wax: #9e2a2b;
+        }
+
+        * { box-sizing: border-box; }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            background-color: var(--bg-color);
+            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1500px;
+        }
+
+        /* --- L'objet Enveloppe --- */
+        .envelope-container {
+            position: relative;
+            width: 380px;
+            height: 260px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.02) rotateY(5deg);
+        }
+
+        /* Fond de l'enveloppe */
+        .envelope-base {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--terracotta);
+            border-radius: 4px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            z-index: 1;
+        }
+
+        /* Rabat (Top Flap) */
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--terracotta);
+            clip-path: polygon(0 0, 50% 60%, 100% 0);
+            transform-origin: top;
+            z-index: 5;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Devant de l'enveloppe (les plis) */
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
+            background: var(--terracotta-dark);
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
+        }
+
+        /* Sceau de cire */
+        .seal {
+            position: absolute;
+            top: 55%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 65px;
+            height: 65px;
+            background: var(--wax);
+            border-radius: 50%;
+            z-index: 6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4a373;
+            font-family: 'Great Vibes';
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+            transition: all 0.5s ease;
+        }
+
+        /* Prénoms gravés sur l'enveloppe (au début) */
+        .envelope-label {
+            position: absolute;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.5rem;
+            z-index: 2;
+            transition: opacity 0.4s;
+        }
+
+        /* --- Carte à l'intérieur --- */
+        .card {
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            width: 360px;
+            height: 240px;
+            background: var(--paper);
+            z-index: 2;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1s cubic-bezier(0.6, 0, 0.4, 1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-family: 'Great Vibes', cursive;
+            color: var(--terracotta);
+            font-size: 2.8rem;
+            margin: 0;
+        }
+
+        #timer {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            color: #5a4a42;
+            font-weight: 600;
+        }
+
+        .btn-go {
+            background: var(--terracotta);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* --- ÉTAT OUVERT --- */
+        .opened .flap {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .opened .seal {
+            opacity: 0;
+            transform: translate(-50%, -100%) scale(0);
+        }
+
+        .opened .card {
+            transform: translateY(-220px); /* La carte sort de folie */
+        }
+
+        .opened .envelope-label {
+            opacity: 0;
+        }
+
+        /* Animation Tourbillon pour la redirection */
+        .vortex {
+            animation: vortexAnim 1.5s forwards cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        @keyframes vortexAnim {
+            to {
+                transform: scale(0) rotate(1080deg);
+                opacity: 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="envelope-container" id="env" onclick="openEnvelope()">
+        <div class="envelope-label">Emma & David</div>
+        <div class="flap"></div>
+        <div class="seal">E&D</div>
+        
+        <div class="card" id="card">
+            <h2>Emma & David</h2>
+            <div id="timer">00j 00h 00m 00s</div>
+            <button class="btn-go" onclick="goToInvitation(event)">Voir l'Invitation</button>
+        </div>
+
+        <div class="envelope-front"></div>
+        <div class="envelope-base"></div>
+    </div>
+
+    <script>
+        function openEnvelope() {
+            document.getElementById('env').classList.add('opened');
+        }
+
+        function goToInvitation(event) {
+            event.stopPropagation(); // Empêche de cliquer sur l'enveloppe à nouveau
+            
+            const card = document.getElementById('card');
+            const env = document.getElementById('env');
+            
+            // Effet Vortex sur toute l'enveloppe
+            env.classList.add('vortex');
+
+            setTimeout(() => {
+                window.location.href = "premiere-page.html";
+            }, 1300);
+        }
+
+        // Timer
+        const target = new Date("Oct 18, 2026 17:00:00").getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const d = target - now;
+            const days = Math.floor(d / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((d % (1000 * 60)) / 1000);
+            document.getElementById("timer").innerHTML = `${days}j ${hours}h ${mins}m ${secs}s`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html>
