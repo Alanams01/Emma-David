@@ -24,7 +24,7 @@
             overflow-x: hidden;
         }
 
-        /* --- Filigrane Parallaxe Animé --- */
+        /* --- Filigrane Parallaxe --- */
         .background-logo {
             position: fixed;
             top: 50%; left: 50%;
@@ -33,15 +33,41 @@
             opacity: 0.04;
             z-index: -1;
             pointer-events: none;
-            will-change: transform;
         }
 
         .main-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 15px 120px;
-            gap: 80px;
+            padding: 20px 15px 120px;
+            gap: 60px;
+        }
+
+        /* --- Enveloppe Statique Haut de Page --- */
+        .static-envelope {
+            width: 280px;
+            height: 180px;
+            background: var(--terracotta);
+            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 2px;
+            margin-bottom: 20px;
+        }
+        .static-envelope::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+            background: rgba(0,0,0,0.03);
+        }
+        .static-envelope img {
+            width: 70px;
+            z-index: 2;
+            filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         /* --- La Carte de Luxe --- */
@@ -50,16 +76,18 @@
             max-width: 420px;
             background: var(--paper);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 60px 25px;
+            padding: 50px 25px;
             position: relative;
             box-shadow: 0 30px 60px rgba(0,0,0,0.05);
             text-align: center;
             border: 1px solid rgba(176, 93, 62, 0.15);
             opacity: 0;
-            transform: translateY(50px) scale(0.95);
+            transform: translateY(40px);
             transition: var(--transition);
             overflow: hidden;
         }
+
+        .luxury-card.visible { opacity: 1; transform: translateY(0); }
 
         .luxury-card::after {
             content: "";
@@ -70,114 +98,65 @@
             transform: skewX(-20deg);
             transition: 0.8s;
         }
+        .luxury-card.visible::after { left: 150%; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        .luxury-card.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        .luxury-card.visible::after {
-            left: 150%;
-            transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .luxury-card > * {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-
-        .luxury-card.visible > * {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .luxury-card.visible > h2 { transition-delay: 0.2s; }
-        .luxury-card.visible > .details-luxe { transition-delay: 0.4s; }
-        .luxury-card.visible > .btn-waze, .luxury-card.visible > .submit-btn { transition-delay: 0.6s; }
-
-        /* --- Éléments de Décoration --- */
-        .logo-top { 
-            width: 90px; 
-            margin-bottom: 20px;
-            animation: slowFloat 4s ease-in-out infinite;
-        }
-
-        @keyframes slowFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
+        .luxury-card > * { opacity: 0; transform: translateY(20px); transition: var(--transition); }
+        .luxury-card.visible > * { opacity: 1; transform: translateY(0); }
 
         .royal-title { 
             font-family: 'Great Vibes'; 
-            font-size: 3.5rem; 
+            font-size: 3.2rem; 
             color: var(--terracotta); 
             margin: 10px 0; 
+            white-space: nowrap; /* Force Emma & David sur une ligne */
         }
 
         .subtitle {
             font-family: 'Montserrat';
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 5px;
             text-transform: uppercase;
             color: var(--terracotta);
             margin-bottom: 25px;
         }
 
-        .details-luxe {
-            font-size: 1.4rem;
-            line-height: 1.7;
-            font-weight: 300;
-        }
+        .details-luxe { font-size: 1.35rem; line-height: 1.7; font-weight: 300; }
+        .sep { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 35px auto; }
 
-        .sep {
-            width: 60px; height: 1px;
-            background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
-            margin: 40px auto;
-        }
-
-        /* --- Boutons Waze --- */
         .btn-waze {
-            display: inline-block;
-            margin-top: 25px;
-            padding: 15px 35px;
-            border: 1px solid var(--terracotta);
-            color: var(--terracotta);
-            text-decoration: none;
-            font-family: 'Montserrat';
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            display: inline-block; margin-top: 20px; padding: 14px 30px;
+            border: 1px solid var(--terracotta); color: var(--terracotta);
+            text-decoration: none; font-family: 'Montserrat';
+            font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
             transition: 0.3s;
         }
+        .btn-waze:active { background: var(--terracotta); color: white; }
 
-        .btn-waze:active {
-            background: var(--terracotta);
-            color: white;
-            transform: scale(0.95);
-        }
+        /* Houppa Layout */
+        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px; line-height: 1.6; font-weight: 500;}
+        .memory-text { font-style: italic; font-size: 0.85rem; color: #777; padding: 15px 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; margin-bottom: 30px; }
 
-        /* --- Formulaire --- */
-        .rsvp-form input[type="text"] {
-            width: 100%; border: none; 
-            border-bottom: 1px solid #ddd;
-            padding: 15px 0; font-family: 'Cormorant Garamond';
-            font-size: 1.6rem; outline: none; background: transparent;
-            transition: 0.4s;
+        /* RSVP Form */
+        .rsvp-form { text-align: left; }
+        .rsvp-form label { font-family: 'Montserrat'; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.6; }
+        .rsvp-form input[type="text"], .rsvp-form textarea {
+            width: 100%; border: none; border-bottom: 1px solid #ddd;
+            padding: 12px 0; font-family: 'Cormorant Garamond';
+            font-size: 1.4rem; outline: none; background: transparent; transition: 0.3s;
         }
-
-        .rsvp-form input[type="text"]:focus {
-            border-bottom: 1px solid var(--terracotta);
-        }
+        .rsvp-form textarea { font-size: 1.1rem; height: 60px; resize: none; }
+        .rsvp-form input:focus, .rsvp-form textarea:focus { border-bottom: 1px solid var(--terracotta); }
 
         .submit-btn {
             width: 100%; background: var(--terracotta); color: white;
-            border: none; padding: 22px; margin-top: 50px;
-            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 6px;
-            font-size: 0.85rem; font-weight: 600; cursor: pointer;
+            border: none; padding: 20px; margin-top: 40px;
+            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 5px;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
         }
 
-        input[type="radio"] { accent-color: var(--terracotta); transform: scale(1.2); }
+        @media (max-width: 380px) {
+            .royal-title { font-size: 2.6rem; } /* Ajuste légèrement la taille pour les très petits écrans */
+        }
 
     </style>
 </head>
@@ -187,7 +166,9 @@
 
     <div class="main-container">
 
-        <img src="logo.png" class="logo-top" alt="E&D">
+        <div class="static-envelope">
+            <img src="logo.png" alt="Logo">
+        </div>
 
         <section class="luxury-card">
             <h2 class="royal-title">Mairie</h2>
@@ -214,27 +195,27 @@
             
             <h2 class="royal-title">Houppa</h2>
 
-            <div class="family-grid" style="display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px;">
+            <div class="family-grid">
                 <div>
                     Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe
                 </div>
                 <div style="text-align: right;">Madame Sonia Krief</div>
             </div>
 
-            <div class="memory-text" style="font-style: italic; font-size: 0.85rem; color: #777; padding: 15px 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; margin-bottom: 30px;">
+            <div class="memory-text">
                 En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
             </div>
 
-            <p class="details-luxe" style="font-size: 1.2rem; opacity: 0.8;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
+            <p class="details-luxe" style="font-size: 1.1rem; opacity: 0.8;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
             
-            <h1 class="royal-title" style="font-size: 4.2rem;">Emma & David</h1>
+            <h1 class="royal-title" style="font-size: 3.8rem;">Emma & David</h1>
 
             <div class="details-luxe">
                 La cérémonie religieuse sera célébrée le<br>
                 <strong>Dimanche 18 Octobre à 17h00 précises</strong><br><br>
                 Suivi de la réception au<br>
                 <strong>Grand Hôtel</strong><br>
-                2 rue Scribe, Paris (Opéra)
+                2 rue Scribe, Paris
             </div>
             <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="btn-waze">Itinéraire Houppa</a>
         </section>
@@ -243,21 +224,24 @@
             <h2 class="royal-title">Réponse</h2>
             <p class="subtitle">RSVP</p>
             <div class="rsvp-form">
-                <form>
-                    <label style="font-family: Montserrat; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.5;">Nom & Prénom</label>
-                    <input type="text" required>
+                <form onsubmit="event.preventDefault(); alert('Merci pour votre message !');">
+                    <label>Nom & Prénom</label>
+                    <input type="text" required placeholder="Votre nom">
                     
-                    <label style="font-family: Montserrat; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.5;">Présence Mairie ?</label>
+                    <label>Présence Mairie ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="m" required> OUI</label>
-                        <label><input type="radio" name="m"> NON</label>
+                        <label style="opacity:1"><input type="radio" name="m" required> OUI</label>
+                        <label style="opacity:1"><input type="radio" name="m"> NON</label>
                     </div>
 
-                    <label style="font-family: Montserrat; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.5;">Présence Houppa ?</label>
+                    <label>Présence Houppa ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="h" required> OUI</label>
-                        <label><input type="radio" name="h"> NON</label>
+                        <label style="opacity:1"><input type="radio" name="h" required> OUI</label>
+                        <label style="opacity:1"><input type="radio" name="h"> NON</label>
                     </div>
+
+                    <label>Un petit mot pour nous ?</label>
+                    <textarea placeholder="Votre message..."></textarea>
 
                     <button type="submit" class="submit-btn">Confirmer ma présence</button>
                 </form>
@@ -267,7 +251,7 @@
     </div>
 
     <script>
-        const observerOptions = { threshold: 0.15 };
+        const observerOptions = { threshold: 0.1 };
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -281,7 +265,7 @@
         window.addEventListener('scroll', () => {
             const logo = document.getElementById('bg-logo');
             const scroll = window.pageYOffset;
-            logo.style.transform = `translate(-50%, -50%) translateY(${scroll * 0.1}px) rotate(${scroll * 0.02}deg)`;
+            logo.style.transform = `translate(-50%, -50%) translateY(${scroll * 0.05}px)`;
         });
     </script>
 </body>
