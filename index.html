@@ -7,11 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --terracotta: #b05d3e;
-            --terracotta-dark: #8c4a31;
+            /* Palette Luxury Beige & Nude harmonisée */
+            --envelope-color: #d9c5b2; 
+            --envelope-dark: #c4ae9a;
             --paper: #fdfcfb;
-            --bg-color: #f2ede9;
-            --wax: #9e2a2b;
+            --bg-color: #f7f3f0;
+            --wax: #9e2a2b; /* On garde le sceau bordeaux pour le contraste luxe */
         }
 
         * { box-sizing: border-box; }
@@ -42,74 +43,79 @@
             transform: scale(1.02) rotateY(5deg);
         }
 
-        /* Fond de l'enveloppe */
         .envelope-base {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: var(--terracotta);
+            background: var(--envelope-color);
+            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
             border-radius: 4px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
             z-index: 1;
         }
 
-        /* Rabat (Top Flap) */
         .flap {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--terracotta);
+            background: var(--envelope-color);
+            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
             clip-path: polygon(0 0, 50% 60%, 100% 0);
             transform-origin: top;
             z-index: 5;
             transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.1);
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.05);
         }
 
-        /* Devant de l'enveloppe (les plis) */
         .envelope-front {
             position: absolute;
             width: 100%;
             height: 100%;
             z-index: 4;
             clip-path: polygon(0 0, 50% 60%, 100% 0, 100% 100%, 0 100%);
-            background: var(--terracotta-dark);
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.2);
+            background: var(--envelope-dark);
+            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.1);
         }
 
-        /* Sceau de cire */
+        /* Sceau avec Logo PNG */
         .seal {
             position: absolute;
             top: 55%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 65px;
-            height: 65px;
+            width: 70px;
+            height: 70px;
             background: var(--wax);
             border-radius: 50%;
             z-index: 6;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #d4a373;
-            font-family: 'Great Vibes';
-            font-size: 1.8rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3), inset 0 0 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 10px rgba(0,0,0,0.2);
             transition: all 0.5s ease;
         }
 
-        /* Prénoms gravés sur l'enveloppe (au début) */
-        .envelope-label {
+        .seal img {
+            width: 45px;
+            height: auto;
+            /* Filtre pour rendre le logo beige clair sur le sceau bordeaux */
+            filter: brightness(0) saturate(100%) invert(95%) sepia(10%) saturate(400%) hue-rotate(330deg) brightness(95%) contrast(90%);
+        }
+
+        /* Logo sur l'enveloppe au début */
+        .envelope-logo-main {
             position: absolute;
-            top: 20px;
-            width: 100%;
-            text-align: center;
-            color: rgba(255,255,255,0.8);
-            font-family: 'Great Vibes', cursive;
-            font-size: 2.5rem;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: auto;
             z-index: 2;
+            opacity: 0.6;
+            filter: sepia(1) saturate(0.5) brightness(0.5); /* Effet gravé discret */
             transition: opacity 0.4s;
         }
 
@@ -121,43 +127,56 @@
             width: 360px;
             height: 240px;
             background: var(--paper);
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
             z-index: 2;
-            padding: 30px;
+            padding: 20px;
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             transition: transform 1s cubic-bezier(0.6, 0, 0.4, 1);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .card img {
+            width: 70px;
+            margin-bottom: 5px;
         }
 
         .card h2 {
             font-family: 'Great Vibes', cursive;
-            color: var(--terracotta);
-            font-size: 2.8rem;
+            color: #a67c52; /* Accent Or satiné */
+            font-size: 2.5rem;
             margin: 0;
+            font-weight: 400;
         }
 
         #timer {
             font-size: 0.8rem;
             letter-spacing: 2px;
-            margin: 15px 0;
+            margin: 10px 0;
             color: #5a4a42;
             font-weight: 600;
         }
 
         .btn-go {
-            background: var(--terracotta);
+            background: #a67c52;
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 10px 25px;
             border-radius: 30px;
             text-transform: uppercase;
             font-size: 0.7rem;
             letter-spacing: 2px;
             cursor: pointer;
             transition: 0.3s;
+            margin-top: 5px;
+        }
+
+        .btn-go:hover {
+            background: var(--envelope-dark);
+            transform: translateY(-2px);
         }
 
         /* --- ÉTAT OUVERT --- */
@@ -172,14 +191,13 @@
         }
 
         .opened .card {
-            transform: translateY(-220px); /* La carte sort de folie */
+            transform: translateY(-230px);
         }
 
-        .opened .envelope-label {
+        .opened .envelope-logo-main {
             opacity: 0;
         }
 
-        /* Animation Tourbillon pour la redirection */
         .vortex {
             animation: vortexAnim 1.5s forwards cubic-bezier(0.7, 0, 0.3, 1);
         }
@@ -190,18 +208,23 @@
                 opacity: 0;
             }
         }
-
     </style>
 </head>
 <body>
 
     <div class="envelope-container" id="env" onclick="openEnvelope()">
-        <div class="envelope-label">Emma & David</div>
+        <img src="logo.png" class="envelope-logo-main" alt="Logo">
+        
         <div class="flap"></div>
-        <div class="seal">E&D</div>
+        
+        <div class="seal">
+            <img src="logo.png" alt="E&D Seal">
+        </div>
         
         <div class="card" id="card">
+            <img src="logo.png" alt="Logo">
             <h2>Emma & David</h2>
+            
             <div id="timer">00j 00h 00m 00s</div>
             <button class="btn-go" onclick="goToInvitation(event)">Voir l'Invitation</button>
         </div>
@@ -216,12 +239,9 @@
         }
 
         function goToInvitation(event) {
-            event.stopPropagation(); // Empêche de cliquer sur l'enveloppe à nouveau
+            event.stopPropagation();
             
-            const card = document.getElementById('card');
             const env = document.getElementById('env');
-            
-            // Effet Vortex sur toute l'enveloppe
             env.classList.add('vortex');
 
             setTimeout(() => {
@@ -229,7 +249,6 @@
             }, 1300);
         }
 
-        // Timer
         const target = new Date("Oct 18, 2026 17:00:00").getTime();
         function updateTimer() {
             const now = new Date().getTime();
