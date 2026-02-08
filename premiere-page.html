@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Emma & David — L'Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --envelope-color: #d9c5b2;
+            --envelope-color: #c9b09a; 
+            --envelope-border: #a88d76; 
             --paper: #fdfcfb;
             --text: #4a3f39;
             --bg: #f7f3f0;
@@ -28,77 +29,81 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 60px 0;
-            gap: 40px; /* Espace entre les enveloppes fermées */
+            padding: 80px 0;
+            gap: 50px;
         }
 
-        /* --- Bloc Invitation --- */
         .invitation-block {
-            width: 90%;
-            max-width: 400px;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 92%;
+            max-width: 420px;
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Conteneur de l'enveloppe */
         .envelope-container {
             position: relative;
             width: 100%;
-            height: 220px;
+            height: 240px;
             background: var(--envelope-color);
             background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 2.5px solid var(--envelope-border); 
+            box-shadow: 0 20px 45px rgba(0,0,0,0.12);
             cursor: pointer;
             z-index: 10;
-            perspective: 1000px;
+            perspective: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Rabat */
         .flap {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: -2.5px; left: -2.5px; width: calc(100% + 5px); height: calc(100% + 2.5px);
             background: var(--envelope-color);
             background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
             clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border: 2.5px solid var(--envelope-border); 
             transform-origin: top;
-            transition: transform 0.6s ease;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 20;
             display: flex;
             justify-content: center;
-            padding-top: 15px;
+            padding-top: 25px;
         }
 
         .flap span {
-            color: white; font-family: 'Great Vibes'; font-size: 2.2rem;
+            color: #fff;
+            font-family: 'Great Vibes';
+            font-size: 2.8rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
-        /* Logo Sceau */
         .seal {
             position: absolute;
-            top: 100%; left: 50%;
+            top: 55%;
+            left: 50%;
             transform: translate(-50%, -50%);
-            width: 60px; height: auto;
+            width: 90px; 
+            height: auto;
             z-index: 25;
-            transition: all 0.4s ease;
+            transition: all 0.5s ease;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
         }
 
-        /* --- La Carte (Contenu masqué) --- */
         .card-content {
             max-height: 0;
             overflow: hidden;
             background: var(--paper);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            width: 94%;
+            width: 96%;
             margin: 0 auto;
             opacity: 0;
-            transform: translateY(-20px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(-30px);
+            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        /* --- ÉTATS ACTIFS (OUVERTURE) --- */
-        .invitation-block.active .envelope-container {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
         }
 
         .invitation-block.active .flap {
@@ -108,41 +113,72 @@
 
         .invitation-block.active .seal {
             opacity: 0;
-            transform: translate(-50%, -150%) scale(0.5);
+            transform: translate(-50%, -150%) scale(0.3);
         }
 
         .invitation-block.active .card-content {
-            max-height: 1500px; /* Laisse la place au texte */
+            max-height: 2800px;
             opacity: 1;
             transform: translateY(0);
-            padding: 40px 20px;
-            margin-top: 10px;
-            border-bottom: 2px solid var(--envelope-color);
+            padding: 60px 20px 50px;
+            margin-top: 15px;
+            border-bottom: 4px solid var(--envelope-color);
         }
 
-        /* --- Styles Intérieurs --- */
-        .title-card { font-family: 'Great Vibes', cursive; font-size: 3rem; color: var(--gold); margin: 0 0 15px; }
-        .details { font-size: 1.3rem; line-height: 1.6; }
-        .highlight { font-weight: 700; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; display: block; margin: 15px 0; }
+        /* --- Image Hébreu --- */
+        .hebrew-phrase {
+            width: 80%;
+            max-width: 250px;
+            margin: 0 auto 30px auto;
+            display: block;
+        }
+
+        /* --- Mise en page Familles --- */
+        .parents-container {
+            display: flex;
+            justify-content: space-between;
+            text-align: left;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-weight: 500;
+            padding: 0 5px;
+        }
+
+        .parents-left { width: 65%; }
+        .parents-right { width: 35%; text-align: right; }
+
+        .memory-phrase {
+            font-style: italic;
+            font-size: 0.85rem;
+            color: #666;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            line-height: 1.5;
+        }
+
+        .title-card { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--gold); margin: 20px 0 10px; }
+        .details { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; line-height: 1.6; }
+        .names-calligraphy { font-family: 'Great Vibes'; font-size: 3rem; color: var(--gold); margin: 15px 0; font-weight: 400; }
+        .highlight { font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; display: block; margin: 15px 0; }
         
         .waze-btn {
-            display: inline-block; margin-top: 20px; padding: 12px 25px;
+            display: inline-block; margin-top: 25px; padding: 12px 28px;
             border: 1px solid var(--gold); color: var(--gold);
-            text-decoration: none; font-size: 0.75rem; letter-spacing: 2px;
-            text-transform: uppercase; font-weight: 600;
+            text-decoration: none; font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;
         }
 
-        .parents { font-size: 0.7rem; display: flex; justify-content: space-between; text-align: left; margin-bottom: 20px; opacity: 0.8; line-height: 1.4; }
-        .memory { font-style: italic; font-size: 0.75rem; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
-
-        /* RSVP Form */
+        /* Formulaire RSVP */
         .rsvp-form { text-align: left; }
-        .rsvp-form label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #999; display: block; margin-top: 20px; }
-        input { width: 100%; border: none; border-bottom: 1px solid #ddd; padding: 10px 0; font-family: 'Cormorant Garamond'; font-size: 1.2rem; outline: none; background: transparent; }
-        .submit-btn { width: 100%; background: var(--gold); color: white; border: none; padding: 18px; margin-top: 30px; text-transform: uppercase; letter-spacing: 4px; cursor: pointer; }
+        .rsvp-form label { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-top: 25px; }
+        input { width: 100%; border: none; border-bottom: 1px solid #ddd; padding: 12px 0; font-family: 'Cormorant Garamond'; font-size: 1.4rem; outline: none; background: transparent; }
+        .submit-btn { width: 100%; background: var(--gold); color: white; border: none; padding: 22px; margin-top: 40px; text-transform: uppercase; letter-spacing: 5px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 600; }
 
-        .conditional { max-height: 0; overflow: hidden; opacity: 0; transition: 0.4s; }
-        .conditional.show { max-height: 60px; opacity: 1; margin-top: 10px; }
+        .conditional { max-height: 0; overflow: hidden; opacity: 0; transition: 0.5s; }
+        .conditional.show { max-height: 80px; opacity: 1; margin-top: 15px; }
 
     </style>
 </head>
@@ -158,36 +194,61 @@
             <div class="card-content">
                 <h2 class="title-card">Mairie</h2>
                 <div class="details">
-                    Nous serions ravis de vous compter parmi nous pour célébrer notre union civile.
-                    <span class="highlight">Jeudi 3 septembre 2026 • 15:30</span>
-                    Mairie de Neuilly sur Seine<br>
-                    96 Av. Achille Peretti
+                    Nous serions ravis de vous compter parmi nous pour célébrer notre union civile qui sera suivie d'un vin d'honneur.
+                    <span class="highlight">Le jeudi 03 septembre 2026 à 15h30 précises</span>
+                    À la mairie de Neuilly-sur-Seine<br>
+                    96 Av. Achille Peretti,<br>
+                    92200 Neuilly-sur-Seine
                 </div>
                 <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="waze-btn" target="_blank">Waze Mairie</a>
-                <div style="height: 1px; background: #eee; margin: 30px 0;"></div>
-                <div class="details">Suivie du héné à 17H30 au <span class="highlight">ACCIL - Rooftop</span></div>
+                <div style="height: 1px; background: rgba(0,0,0,0.08); margin: 40px 0;"></div>
+                <div class="details">
+                    La cérémonie sera suivie d'un henné à 17h30<br>
+                    à l'<strong>ACCIL - Rooftop</strong><br>
+                    63 rue Louis Rouquier,<br>
+                    92300 Levallois-Perret
+                </div>
                 <a href="https://waze.com/ul?q=63+Rue+Louis+Rouquier+Levallois" class="waze-btn" target="_blank">Waze Rooftop</a>
             </div>
         </div>
 
-        <div class="invitation-block" id="block-mariage">
-            <div class="envelope-container" onclick="toggleInvite('block-mariage')">
+        <div class="invitation-block" id="block-houppa">
+            <div class="envelope-container" onclick="toggleInvite('block-houppa')">
                 <div class="flap"><span>Mariage</span></div>
                 <img src="logo.png" class="seal">
             </div>
             <div class="card-content">
-                <div class="parents">
-                    <div>Mme. Sophie Prajs<br>Mme. Béatrice Philippe<br>M. Éric Smadja</div>
-                    <div style="text-align: right;">Madame Sonia Krief</div>
+                <img src="hebreu.png" class="hebrew-phrase" alt="Phrase en hébreu">
+
+                <div class="parents-container">
+                    <div class="parents-left">
+                        Mme Sophie Prajs<br>
+                        Mme Beatrice Philippe<br>
+                        Mme Nathalie Prajs et M. Eric Smadja<br>
+                        M et Mme Benjamin Philippe
+                    </div>
+                    <div class="parents-right">
+                        Madame Sonia Krief
+                    </div>
                 </div>
-                <div class="memory">En la mémoire de nos chers grands-parents</div>
-                <h2 class="title-card">Houppa</h2>
+                
+                <div class="memory-phrase">
+                    En la mémoire de nos chers grands-parents<br>
+                    Albert Prajs, Didier Philippe, Haya et Fradji Krief.
+                </div>
+
                 <div class="details">
-                    Cérémonie religieuse de
-                    <h3 style="font-family: 'Great Vibes'; font-size: 2.2rem; color: var(--gold); margin: 10px 0;">Emma & David</h3>
-                    <span class="highlight">Dimanche 18 octobre • 17:00</span>
-                    <strong>Grand Hôtel Intercontinental</strong><br>
-                    2 rue Scribe, Paris
+                    Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants
+                </div>
+
+                <div class="names-calligraphy">Emma & David</div>
+
+                <div class="details">
+                    et vous prie de leur faire l'honneur de votre présence à la cérémonie religieuse qui sera célébrée
+                    <span class="highlight">Le dimanche 18 octobre à 17h00 précises</span>
+                    Suivi de la réception au<br>
+                    <strong>Grand Hôtel</strong><br>
+                    2 rue Scribe, Paris (Opéra)
                 </div>
                 <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="waze-btn" target="_blank">Waze Houppa</a>
             </div>
@@ -205,16 +266,16 @@
                     <input type="text" placeholder="..." required>
                     
                     <label>Présence Mairie ?</label>
-                    <div style="display: flex; gap: 30px; margin-top: 10px;">
-                        <label style="font-size: 0.9rem; cursor:pointer;"><input type="radio" name="m" onclick="toggleB('m-b', true)"> OUI</label>
-                        <label style="font-size: 0.9rem; cursor:pointer;"><input type="radio" name="m" onclick="toggleB('m-b', false)"> NON</label>
+                    <div style="display: flex; gap: 40px; margin-top: 15px;">
+                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="m" onclick="toggleB('m-b', true)"> OUI</label>
+                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="m" onclick="toggleB('m-b', false)"> NON</label>
                     </div>
                     <div id="m-b" class="conditional"><input type="number" placeholder="Nombre de personnes"></div>
 
                     <label>Présence Houppa ?</label>
-                    <div style="display: flex; gap: 30px; margin-top: 10px;">
-                        <label style="font-size: 0.9rem; cursor:pointer;"><input type="radio" name="h" onclick="toggleB('h-b', true)"> OUI</label>
-                        <label style="font-size: 0.9rem; cursor:pointer;"><input type="radio" name="h" onclick="toggleB('h-b', false)"> NON</label>
+                    <div style="display: flex; gap: 40px; margin-top: 15px;">
+                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="h" onclick="toggleB('h-b', true)"> OUI</label>
+                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="h" onclick="toggleB('h-b', false)"> NON</label>
                     </div>
                     <div id="h-b" class="conditional"><input type="number" placeholder="Nombre de personnes"></div>
 
@@ -228,14 +289,15 @@
     <script>
         function toggleInvite(id) {
             const block = document.getElementById(id);
-            // On ajoute la classe active au clic
             block.classList.toggle('active');
             
-            // On attend un peu que l'animation se lance pour scroller proprement
             if (block.classList.contains('active')) {
                 setTimeout(() => {
-                    block.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 400);
+                    const yOffset = -20; 
+                    const element = block;
+                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({top: y, behavior: 'smooth'});
+                }, 450);
             }
         }
 
