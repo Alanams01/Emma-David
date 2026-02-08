@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Emma & David — L'Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --envelope-color: #c9b09a; 
-            --envelope-border: #a88d76; 
-            --paper: #fdfcfb;
-            --text: #4a3f39;
-            --bg: #f7f3f0;
-            --gold: #a67c52;
+            --terracotta: #b05d3e; 
+            --bg: #f7f3f0; 
+            --paper: #ffffff;
+            --text: #3d3530;
+            --transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -20,291 +19,270 @@
         body, html { 
             margin: 0; padding: 0; 
             background-color: var(--bg); 
-            font-family: 'Cormorant Garamond', serif;
             color: var(--text);
-            scroll-behavior: smooth;
+            font-family: 'Cormorant Garamond', serif;
+            overflow-x: hidden;
         }
 
-        .wrapper {
+        /* --- Filigrane Parallaxe Animé --- */
+        .background-logo {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            opacity: 0.04;
+            z-index: -1;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .main-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 80px 0;
-            gap: 50px;
+            padding: 40px 15px 120px;
+            gap: 80px;
         }
 
-        .invitation-block {
-            width: 92%;
-            max-width: 420px;
-            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .envelope-container {
-            position: relative;
+        /* --- La Carte de Luxe --- */
+        .luxury-card {
             width: 100%;
-            height: 240px;
-            background: var(--envelope-color);
-            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
-            border: 2.5px solid var(--envelope-border); 
-            box-shadow: 0 20px 45px rgba(0,0,0,0.12);
-            cursor: pointer;
-            z-index: 10;
-            perspective: 1200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .flap {
-            position: absolute;
-            top: -2.5px; left: -2.5px; width: calc(100% + 5px); height: calc(100% + 2.5px);
-            background: var(--envelope-color);
-            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
-            border: 2.5px solid var(--envelope-border); 
-            transform-origin: top;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 20;
-            display: flex;
-            justify-content: center;
-            padding-top: 25px;
-        }
-
-        .flap span {
-            color: #fff;
-            font-family: 'Great Vibes';
-            font-size: 2.8rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-
-        .seal {
-            position: absolute;
-            top: 55%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90px; 
-            height: auto;
-            z-index: 25;
-            transition: all 0.5s ease;
-            pointer-events: none;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
-        }
-
-        .card-content {
-            max-height: 0;
-            overflow: hidden;
+            max-width: 420px;
             background: var(--paper);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            width: 96%;
-            margin: 0 auto;
-            opacity: 0;
-            transform: translateY(-30px);
-            transition: all 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 60px 25px;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
             text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            border-left: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-        }
-
-        .invitation-block.active .flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        .invitation-block.active .seal {
+            border: 1px solid rgba(176, 93, 62, 0.15);
             opacity: 0;
-            transform: translate(-50%, -150%) scale(0.3);
+            transform: translateY(50px) scale(0.95);
+            transition: var(--transition);
+            overflow: hidden;
         }
 
-        .invitation-block.active .card-content {
-            max-height: 2800px;
+        .luxury-card::after {
+            content: "";
+            position: absolute;
+            top: 0; left: -150%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+            transform: skewX(-20deg);
+            transition: 0.8s;
+        }
+
+        .luxury-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .luxury-card.visible::after {
+            left: 150%;
+            transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .luxury-card > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .luxury-card.visible > * {
             opacity: 1;
             transform: translateY(0);
-            padding: 60px 20px 50px;
-            margin-top: 15px;
-            border-bottom: 4px solid var(--envelope-color);
         }
 
-        /* --- Image Hébreu --- */
-        .hebrew-phrase {
-            width: 80%;
-            max-width: 250px;
-            margin: 0 auto 30px auto;
-            display: block;
+        .luxury-card.visible > h2 { transition-delay: 0.2s; }
+        .luxury-card.visible > .details-luxe { transition-delay: 0.4s; }
+        .luxury-card.visible > .btn-waze, .luxury-card.visible > .submit-btn { transition-delay: 0.6s; }
+
+        /* --- Éléments de Décoration --- */
+        .logo-top { 
+            width: 90px; 
+            margin-bottom: 20px;
+            animation: slowFloat 4s ease-in-out infinite;
         }
 
-        /* --- Mise en page Familles --- */
-        .parents-container {
-            display: flex;
-            justify-content: space-between;
-            text-align: left;
+        @keyframes slowFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .royal-title { 
+            font-family: 'Great Vibes'; 
+            font-size: 3.5rem; 
+            color: var(--terracotta); 
+            margin: 10px 0; 
+        }
+
+        .subtitle {
+            font-family: 'Montserrat';
             font-size: 0.75rem;
-            line-height: 1.6;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--terracotta);
             margin-bottom: 25px;
-            font-weight: 500;
-            padding: 0 5px;
         }
 
-        .parents-left { width: 65%; }
-        .parents-right { width: 35%; text-align: right; }
-
-        .memory-phrase {
-            font-style: italic;
-            font-size: 0.85rem;
-            color: #666;
-            margin: 20px 0;
-            padding: 15px 0;
-            border-top: 1px solid rgba(0,0,0,0.06);
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            line-height: 1.5;
+        .details-luxe {
+            font-size: 1.4rem;
+            line-height: 1.7;
+            font-weight: 300;
         }
 
-        .title-card { font-family: 'Great Vibes', cursive; font-size: 3.5rem; color: var(--gold); margin: 20px 0 10px; }
-        .details { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; line-height: 1.6; }
-        .names-calligraphy { font-family: 'Great Vibes'; font-size: 3rem; color: var(--gold); margin: 15px 0; font-weight: 400; }
-        .highlight { font-family: 'Montserrat', sans-serif; font-weight: 600; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; display: block; margin: 15px 0; }
-        
-        .waze-btn {
-            display: inline-block; margin-top: 25px; padding: 12px 28px;
-            border: 1px solid var(--gold); color: var(--gold);
-            text-decoration: none; font-family: 'Montserrat', sans-serif;
-            font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;
+        .sep {
+            width: 60px; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--terracotta), transparent);
+            margin: 40px auto;
         }
 
-        /* Formulaire RSVP */
-        .rsvp-form { text-align: left; }
-        .rsvp-form label { font-family: 'Montserrat', sans-serif; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: #888; display: block; margin-top: 25px; }
-        input { width: 100%; border: none; border-bottom: 1px solid #ddd; padding: 12px 0; font-family: 'Cormorant Garamond'; font-size: 1.4rem; outline: none; background: transparent; }
-        .submit-btn { width: 100%; background: var(--gold); color: white; border: none; padding: 22px; margin-top: 40px; text-transform: uppercase; letter-spacing: 5px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 0.85rem; font-weight: 600; }
+        /* --- Boutons Waze --- */
+        .btn-waze {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 15px 35px;
+            border: 1px solid var(--terracotta);
+            color: var(--terracotta);
+            text-decoration: none;
+            font-family: 'Montserrat';
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
 
-        .conditional { max-height: 0; overflow: hidden; opacity: 0; transition: 0.5s; }
-        .conditional.show { max-height: 80px; opacity: 1; margin-top: 15px; }
+        .btn-waze:active {
+            background: var(--terracotta);
+            color: white;
+            transform: scale(0.95);
+        }
+
+        /* --- Formulaire --- */
+        .rsvp-form input[type="text"] {
+            width: 100%; border: none; 
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0; font-family: 'Cormorant Garamond';
+            font-size: 1.6rem; outline: none; background: transparent;
+            transition: 0.4s;
+        }
+
+        .rsvp-form input[type="text"]:focus {
+            border-bottom: 1px solid var(--terracotta);
+        }
+
+        .submit-btn {
+            width: 100%; background: var(--terracotta); color: white;
+            border: none; padding: 22px; margin-top: 50px;
+            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 6px;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer;
+        }
+
+        input[type="radio"] { accent-color: var(--terracotta); transform: scale(1.2); }
 
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
+    <img src="logo.png" id="bg-logo" class="background-logo" alt="">
 
-        <div class="invitation-block" id="block-mairie">
-            <div class="envelope-container" onclick="toggleInvite('block-mairie')">
-                <div class="flap"><span>Mairie</span></div>
-                <img src="logo.png" class="seal">
+    <div class="main-container">
+
+        <img src="logo.png" class="logo-top" alt="E&D">
+
+        <section class="luxury-card">
+            <h2 class="royal-title">Mairie</h2>
+            <div class="details-luxe">
+                Nous serions ravis de vous compter parmi nous pour célébrer notre union qui sera suivie d'un <strong>vin d'honneur</strong>.<br><br>
+                <strong>Le jeudi 03 septembre 2026<br>à 15h30 précises</strong><br><br>
+                À la mairie de Neuilly-sur-Seine<br>
+                96 Av. Achille Peretti
             </div>
-            <div class="card-content">
-                <h2 class="title-card">Mairie</h2>
-                <div class="details">
-                    Nous serions ravis de vous compter parmi nous pour célébrer notre union civile qui sera suivie d'un vin d'honneur.
-                    <span class="highlight">Le jeudi 03 septembre 2026 à 15h30 précises</span>
-                    À la mairie de Neuilly-sur-Seine<br>
-                    96 Av. Achille Peretti,<br>
-                    92200 Neuilly-sur-Seine
-                </div>
-                <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="waze-btn" target="_blank">Waze Mairie</a>
-                <div style="height: 1px; background: rgba(0,0,0,0.08); margin: 40px 0;"></div>
-                <div class="details">
-                    La cérémonie sera suivie d'un henné à 17h30<br>
-                    à l'<strong>ACCIL - Rooftop</strong><br>
-                    63 rue Louis Rouquier,<br>
-                    92300 Levallois-Perret
-                </div>
-                <a href="https://waze.com/ul?q=63+Rue+Louis+Rouquier+Levallois" class="waze-btn" target="_blank">Waze Rooftop</a>
+            <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="btn-waze">Itinéraire Mairie</a>
+            
+            <div class="sep"></div>
+            
+            <div class="details-luxe">
+                La cérémonie sera suivie d'un henné à <strong>17h30</strong><br>
+                à l'<strong>ACCIL - Rooftop</strong><br>
+                63 rue Louis Rouquier, Levallois
             </div>
-        </div>
+            <a href="https://waze.com/ul?q=63+Rue+Louis+Rouquier+Levallois" class="btn-waze">Itinéraire Rooftop</a>
+        </section>
 
-        <div class="invitation-block" id="block-houppa">
-            <div class="envelope-container" onclick="toggleInvite('block-houppa')">
-                <div class="flap"><span>Mariage</span></div>
-                <img src="logo.png" class="seal">
+        <section class="luxury-card">
+            <img src="hebreu.png" style="width: 180px; margin-bottom: 30px;" alt="">
+            
+            <h2 class="royal-title">Houppa</h2>
+
+            <div class="family-grid" style="display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px;">
+                <div>
+                    Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe
+                </div>
+                <div style="text-align: right;">Madame Sonia Krief</div>
             </div>
-            <div class="card-content">
-                <img src="hebreu.png" class="hebrew-phrase" alt="Phrase en hébreu">
 
-                <div class="parents-container">
-                    <div class="parents-left">
-                        Mme Sophie Prajs<br>
-                        Mme Beatrice Philippe<br>
-                        Mme Nathalie Prajs et M. Eric Smadja<br>
-                        M et Mme Benjamin Philippe
-                    </div>
-                    <div class="parents-right">
-                        Madame Sonia Krief
-                    </div>
-                </div>
-                
-                <div class="memory-phrase">
-                    En la mémoire de nos chers grands-parents<br>
-                    Albert Prajs, Didier Philippe, Haya et Fradji Krief.
-                </div>
-
-                <div class="details">
-                    Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants
-                </div>
-
-                <div class="names-calligraphy">Emma & David</div>
-
-                <div class="details">
-                    et vous prie de leur faire l'honneur de votre présence à la cérémonie religieuse qui sera célébrée
-                    <span class="highlight">Le dimanche 18 octobre à 17h00 précises</span>
-                    Suivi de la réception au<br>
-                    <strong>Grand Hôtel</strong><br>
-                    2 rue Scribe, Paris (Opéra)
-                </div>
-                <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="waze-btn" target="_blank">Waze Houppa</a>
+            <div class="memory-text" style="font-style: italic; font-size: 0.85rem; color: #777; padding: 15px 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; margin-bottom: 30px;">
+                En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
             </div>
-        </div>
 
-        <div class="invitation-block" id="block-rsvp">
-            <div class="envelope-container" onclick="toggleInvite('block-rsvp')">
-                <div class="flap"><span>Réponse</span></div>
-                <img src="logo.png" class="seal">
+            <p class="details-luxe" style="font-size: 1.2rem; opacity: 0.8;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
+            
+            <h1 class="royal-title" style="font-size: 4.2rem;">Emma & David</h1>
+
+            <div class="details-luxe">
+                La cérémonie religieuse sera célébrée le<br>
+                <strong>Dimanche 18 Octobre à 17h00 précises</strong><br><br>
+                Suivi de la réception au<br>
+                <strong>Grand Hôtel</strong><br>
+                2 rue Scribe, Paris (Opéra)
             </div>
-            <div class="card-content">
-                <h2 class="title-card">Réponse</h2>
-                <form class="rsvp-form" onclick="event.stopPropagation()">
-                    <label>Nom & Prénom</label>
-                    <input type="text" placeholder="..." required>
+            <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="btn-waze">Itinéraire Houppa</a>
+        </section>
+
+        <section class="luxury-card">
+            <h2 class="royal-title">Réponse</h2>
+            <p class="subtitle">RSVP</p>
+            <div class="rsvp-form">
+                <form>
+                    <label style="font-family: Montserrat; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.5;">Nom & Prénom</label>
+                    <input type="text" required>
                     
-                    <label>Présence Mairie ?</label>
-                    <div style="display: flex; gap: 40px; margin-top: 15px;">
-                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="m" onclick="toggleB('m-b', true)"> OUI</label>
-                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="m" onclick="toggleB('m-b', false)"> NON</label>
+                    <label style="font-family: Montserrat; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.5;">Présence Mairie ?</label>
+                    <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
+                        <label><input type="radio" name="m" required> OUI</label>
+                        <label><input type="radio" name="m"> NON</label>
                     </div>
-                    <div id="m-b" class="conditional"><input type="number" placeholder="Nombre de personnes"></div>
 
-                    <label>Présence Houppa ?</label>
-                    <div style="display: flex; gap: 40px; margin-top: 15px;">
-                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="h" onclick="toggleB('h-b', true)"> OUI</label>
-                        <label style="font-size: 1.1rem; cursor:pointer;"><input type="radio" name="h" onclick="toggleB('h-b', false)"> NON</label>
+                    <label style="font-family: Montserrat; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.5;">Présence Houppa ?</label>
+                    <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
+                        <label><input type="radio" name="h" required> OUI</label>
+                        <label><input type="radio" name="h"> NON</label>
                     </div>
-                    <div id="h-b" class="conditional"><input type="number" placeholder="Nombre de personnes"></div>
 
-                    <button type="submit" class="submit-btn">Confirmer</button>
+                    <button type="submit" class="submit-btn">Confirmer ma présence</button>
                 </form>
             </div>
-        </div>
+        </section>
 
     </div>
 
     <script>
-        function toggleInvite(id) {
-            const block = document.getElementById(id);
-            block.classList.toggle('active');
-            
-            if (block.classList.contains('active')) {
-                setTimeout(() => {
-                    const yOffset = -20; 
-                    const element = block;
-                    const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                    window.scrollTo({top: y, behavior: 'smooth'});
-                }, 450);
-            }
-        }
+        const observerOptions = { threshold: 0.15 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-        function toggleB(id, show) {
-            const el = document.getElementById(id);
-            show ? el.classList.add('show') : el.classList.remove('show');
-        }
+        document.querySelectorAll('.luxury-card').forEach(card => observer.observe(card));
+
+        window.addEventListener('scroll', () => {
+            const logo = document.getElementById('bg-logo');
+            const scroll = window.pageYOffset;
+            logo.style.transform = `translate(-50%, -50%) translateY(${scroll * 0.1}px) rotate(${scroll * 0.02}deg)`;
+        });
     </script>
 </body>
 </html>
