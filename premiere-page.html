@@ -43,7 +43,7 @@
             gap: 60px;
         }
 
-        /* --- Enveloppe Statique Haut de Page --- */
+        /* --- Enveloppe Statique --- */
         .static-envelope {
             width: 280px;
             height: 180px;
@@ -76,7 +76,7 @@
             max-width: 420px;
             background: var(--paper);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 50px 25px;
+            padding: 50px 20px; /* Réduit pour plus de sécurité */
             position: relative;
             box-shadow: 0 30px 60px rgba(0,0,0,0.05);
             text-align: center;
@@ -89,26 +89,13 @@
 
         .luxury-card.visible { opacity: 1; transform: translateY(0); }
 
-        .luxury-card::after {
-            content: "";
-            position: absolute;
-            top: 0; left: -150%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
-            transform: skewX(-20deg);
-            transition: 0.8s;
-        }
-        .luxury-card.visible::after { left: 150%; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
-
-        .luxury-card > * { opacity: 0; transform: translateY(20px); transition: var(--transition); }
-        .luxury-card.visible > * { opacity: 1; transform: translateY(0); }
-
         .royal-title { 
             font-family: 'Great Vibes'; 
-            font-size: 2.8rem; /* Réduit pour éviter la morsure du bord */
+            font-size: 2.2rem; /* Réduit encore pour éviter toute morsure */
             color: var(--terracotta); 
             margin: 10px 0; 
             white-space: nowrap;
+            padding: 0 10px; /* Marge interne de sécurité */
         }
 
         .subtitle {
@@ -120,7 +107,7 @@
             margin-bottom: 25px;
         }
 
-        .details-luxe { font-size: 1.35rem; line-height: 1.7; font-weight: 300; }
+        .details-luxe { font-size: 1.3rem; line-height: 1.7; font-weight: 300; }
         .sep { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 35px auto; }
 
         .btn-waze {
@@ -130,35 +117,21 @@
             font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
             transition: 0.3s;
         }
-        .btn-waze:active { background: var(--terracotta); color: white; }
 
-        /* Houppa Layout */
-        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px; line-height: 1.6; font-weight: 500;}
+        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px; line-height: 1.6; }
         .memory-text { font-style: italic; font-size: 0.85rem; color: #777; padding: 15px 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; margin-bottom: 30px; }
 
         /* RSVP Form */
         .rsvp-form { text-align: left; }
         .rsvp-form label { font-family: 'Montserrat'; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.6; }
-        .rsvp-form input[type="text"], .rsvp-form input[type="number"], .rsvp-form textarea {
+        .rsvp-form input, .rsvp-form textarea {
             width: 100%; border: none; border-bottom: 1px solid #ddd;
             padding: 12px 0; font-family: 'Cormorant Garamond';
-            font-size: 1.4rem; outline: none; background: transparent; transition: 0.3s;
+            font-size: 1.4rem; outline: none; background: transparent;
         }
-        .rsvp-form textarea { font-size: 1.1rem; height: 60px; resize: none; }
-        .rsvp-form input:focus, .rsvp-form textarea:focus { border-bottom: 1px solid var(--terracotta); }
 
-        /* Conditional Inputs */
-        .conditional-field {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: all 0.5s ease-out;
-        }
-        .conditional-field.show {
-            max-height: 100px;
-            opacity: 1;
-            margin-top: 10px;
-        }
+        .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: all 0.5s ease; }
+        .conditional-field.show { max-height: 100px; opacity: 1; margin-top: 10px; }
 
         .submit-btn {
             width: 100%; background: var(--terracotta); color: white;
@@ -167,13 +140,38 @@
             font-size: 0.8rem; font-weight: 600; cursor: pointer;
         }
 
-        @media (max-width: 380px) {
-            .royal-title { font-size: 2.4rem; } 
+        /* --- Bouton Musique --- */
+        .music-control {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 45px;
+            height: 45px;
+            background: var(--paper);
+            border: 1px solid var(--terracotta);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
+        .music-control svg { width: 20px; fill: var(--terracotta); }
+        .music-control.muted svg { opacity: 0.4; }
 
     </style>
 </head>
 <body>
+
+    <audio id="bgMusic" loop>
+        <source src="musique.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="music-control" id="musicBtn" onclick="toggleMusic()">
+        <svg id="icon-play" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </div>
 
     <img src="logo.png" id="bg-logo" class="background-logo" alt="">
 
@@ -192,9 +190,7 @@
                 96 Av. Achille Peretti
             </div>
             <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="btn-waze">Itinéraire Mairie</a>
-            
             <div class="sep"></div>
-            
             <div class="details-luxe">
                 La cérémonie sera suivie d'un henné à <strong>17h30</strong><br>
                 à l'<strong>ACCIL - Rooftop</strong><br>
@@ -204,25 +200,15 @@
         </section>
 
         <section class="luxury-card">
-            <img src="hebreu.png" style="width: 180px; margin-bottom: 30px;" alt="">
-            
+            <img src="hebreu.png" style="width: 180px; margin-bottom: 30px;">
             <h2 class="royal-title">Houppa</h2>
-
             <div class="family-grid">
-                <div>
-                    Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe
-                </div>
+                <div>Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe</div>
                 <div style="text-align: right;">Madame Sonia Krief</div>
             </div>
-
-            <div class="memory-text">
-                En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
-            </div>
-
+            <div class="memory-text">En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.</div>
             <p class="details-luxe" style="font-size: 1.1rem; opacity: 0.8;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
-            
-            <h1 class="royal-title" style="font-size: 3.5rem;">Emma & David</h1>
-
+            <h1 class="royal-title">Emma & David</h1>
             <div class="details-luxe">
                 La cérémonie religieuse sera célébrée le<br>
                 <strong>Dimanche 18 Octobre à 17h00 précises</strong><br><br>
@@ -239,70 +225,73 @@
             <div class="rsvp-form">
                 <form id="rsvpForm">
                     <label>Nom & Prénom</label>
-                    <input type="text" id="guestName" required placeholder="Votre nom">
+                    <input type="text" required placeholder="Votre nom">
                     
                     <label>Présence Mairie ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label style="opacity:1"><input type="radio" name="m" value="OUI" onclick="toggleField('mairieField', true)" required> OUI</label>
-                        <label style="opacity:1"><input type="radio" name="m" value="NON" onclick="toggleField('mairieField', false)"> NON</label>
+                        <label><input type="radio" name="m" onclick="toggleField('mairieField', true)" required> OUI</label>
+                        <label><input type="radio" name="m" onclick="toggleField('mairieField', false)"> NON</label>
                     </div>
                     <div id="mairieField" class="conditional-field">
                         <label>Nombre de personnes (Mairie)</label>
-                        <input type="number" name="countM" min="1" placeholder="Ex: 2">
+                        <input type="number" min="1" placeholder="Ex: 2">
                     </div>
 
                     <label>Présence Houppa ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label style="opacity:1"><input type="radio" name="h" value="OUI" onclick="toggleField('houppaField', true)" required> OUI</label>
-                        <label style="opacity:1"><input type="radio" name="h" value="NON" onclick="toggleField('houppaField', false)"> NON</label>
+                        <label><input type="radio" name="h" onclick="toggleField('houppaField', true)" required> OUI</label>
+                        <label><input type="radio" name="h" onclick="toggleField('houppaField', false)"> NON</label>
                     </div>
                     <div id="houppaField" class="conditional-field">
                         <label>Nombre de personnes (Houppa)</label>
-                        <input type="number" name="countH" min="1" placeholder="Ex: 2">
+                        <input type="number" min="1" placeholder="Ex: 2">
                     </div>
 
                     <label>Un petit mot pour nous ?</label>
                     <textarea placeholder="Votre message..."></textarea>
-
-                    <button type="submit" class="submit-btn">Confirmer ma présence</button>
+                    <button type="submit" class="submit-btn">Confirmer</button>
                 </form>
             </div>
         </section>
-
     </div>
 
     <script>
-        // Logique d'affichage des champs nombre de personnes
-        function toggleField(id, show) {
-            const field = document.getElementById(id);
-            if (show) {
-                field.classList.add('show');
+        const music = document.getElementById('bgMusic');
+        let musicStarted = false;
+
+        // Lance la musique au premier scroll
+        window.addEventListener('scroll', () => {
+            if (!musicStarted) {
+                music.play().catch(() => {}); // Gère le blocage auto des navigateurs
+                musicStarted = true;
+            }
+            const logo = document.getElementById('bg-logo');
+            logo.style.transform = `translate(-50%, -50%) translateY(${window.pageYOffset * 0.05}px)`;
+        }, { passive: true });
+
+        function toggleMusic() {
+            const btn = document.getElementById('musicBtn');
+            if (music.paused) {
+                music.play();
+                btn.classList.remove('muted');
             } else {
-                field.classList.remove('show');
+                music.pause();
+                btn.classList.add('muted');
             }
         }
 
-        const observerOptions = { threshold: 0.1 };
+        function toggleField(id, show) {
+            const field = document.getElementById(id);
+            show ? field.classList.add('show') : field.classList.remove('show');
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
+                if (entry.isIntersecting) entry.target.classList.add('visible');
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
         document.querySelectorAll('.luxury-card').forEach(card => observer.observe(card));
-
-        window.addEventListener('scroll', () => {
-            const logo = document.getElementById('bg-logo');
-            const scroll = window.pageYOffset;
-            logo.style.transform = `translate(-50%, -50%) translateY(${scroll * 0.05}px)`;
-        });
-
-        document.getElementById('rsvpForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Merci ' + document.getElementById('guestName').value + ', votre réponse a été prise en compte !');
-        });
     </script>
 </body>
 </html>
