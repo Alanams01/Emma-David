@@ -21,11 +21,9 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        /* --- TEXTURE DE FOND PAPIER --- */
+        /* --- TEXTURE DE FOND PAPIER CONSERVÉE --- */
         body::before {
             content: "";
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -35,41 +33,43 @@
             z-index: 1;
         }
 
-        /* --- LOGO1 AU CENTRE --- */
+        /* --- LOGO AGRANDI --- */
         .logo-container {
             position: relative;
             z-index: 10;
-            flex: 1; /* Prend l'espace disponible au centre */
+            flex: 1; 
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 0; /* Suppression des marges pour laisser l'image respirer */
             animation: fadeInLogo 2s ease-out;
         }
 
         .main-logo {
-            width: 80vw; /* Largeur sur mobile */
-            max-width: 400px; /* Largeur max sur ordi */
-            height: auto;
+            width: 100%; /* Prend toute la largeur disponible */
+            height: 85vh; /* Occupe la quasi-totalité de la hauteur de l'écran */
+            object-fit: contain; /* Garde les proportions sans déformer */
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.05));
         }
 
-        /* --- CONTAINER BOUTON EN BAS --- */
+        /* --- CONTAINER BOUTON --- */
         .footer-overlay {
-            position: relative;
+            position: absolute; /* Fixé par rapport au bas pour ne pas gêner le logo */
+            bottom: 40px;
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding-bottom: 80px; /* Distance du bord bas */
-            z-index: 10;
+            z-index: 20;
             animation: fadeInBtn 2.5s ease-out;
         }
 
-        /* --- BOUTON LUXE ÉPURÉ --- */
+        /* --- BOUTON --- */
         .btn-enter {
             display: inline-block;
             padding: 18px 45px;
-            background: transparent;
+            background: rgba(255, 255, 255, 0.7); /* Léger fond pour rester lisible si le logo passe derrière */
+            backdrop-filter: blur(5px);
             color: var(--text-main);
             border: 1px solid var(--text-main);
             text-decoration: none;
@@ -84,12 +84,11 @@
             background: var(--text-main);
             color: #fff;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         /* --- ANIMATIONS --- */
         @keyframes fadeInLogo {
-            from { opacity: 0; transform: scale(0.95); }
+            from { opacity: 0; transform: scale(1.05); } /* Effet de zoom arrière doux à l'entrée */
             to { opacity: 1; transform: scale(1); }
         }
 
@@ -98,7 +97,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Transition de sortie */
         .fade-out {
             animation: fadeOut 0.8s forwards cubic-bezier(0.2, 1, 0.3, 1);
         }
@@ -106,7 +104,6 @@
         @keyframes fadeOut {
             to { opacity: 0; transform: scale(1.05); filter: blur(20px); }
         }
-
     </style>
 </head>
 <body>
@@ -121,9 +118,7 @@
 
     <script>
         function startTransition() {
-            // Effet de zoom et flou au clic sur tout le corps
             document.body.classList.add('fade-out');
-            
             setTimeout(() => {
                 window.location.href = "premiere-page.html";
             }, 800);
