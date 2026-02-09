@@ -28,10 +28,9 @@
             overflow-x: hidden;
         }
 
-        /* --- LAYOUT CARTES --- */
         .main-container {
             position: relative; display: flex; flex-direction: column; align-items: center;
-            padding: 60px 15px 150px; gap: 100px; z-index: 60;
+            padding: 40px 15px 150px; gap: 80px; z-index: 60;
         }
 
         .luxury-card {
@@ -45,26 +44,39 @@
             transition: all 1.2s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        .luxury-card:nth-child(even) { transform: translateX(-80px); }
-        .luxury-card:nth-child(odd) { transform: translateX(80px); }
-        .luxury-card.visible { opacity: 1; transform: translateX(0); }
+        .luxury-card.visible { opacity: 1; transform: translateX(0) !important; }
+        .luxury-card:nth-child(even) { transform: translateX(-50px); }
+        .luxury-card:nth-child(odd) { transform: translateX(50px); }
 
         .section-img {
-            width: 100%; height: 280px; object-fit: cover;
+            width: 100%; height: auto; max-height: 350px; object-fit: cover;
             border-radius: 2px; margin: 25px 0;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .hebrew-full { width: 100%; height: auto; margin-bottom: 10px; }
-        .royal-title { font-family: 'Great Vibes'; font-size: 3rem; color: var(--terracotta); margin: 5px 0; white-space: nowrap; }
-        .details-luxe { font-size: 1.5rem; line-height: 1.8; font-weight: 300; }
+        .hebrew-full { width: 100%; height: auto; margin-bottom: 15px; }
+        
+        .royal-title { 
+            font-family: 'Great Vibes'; 
+            color: var(--terracotta); 
+            margin: 10px 0; 
+            white-space: nowrap;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .names-main { font-size: 3.2rem; }
+        .section-title { font-size: 2.8rem; }
+
+        .details-luxe { font-size: 1.4rem; line-height: 1.7; font-weight: 300; }
         .sep { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 30px auto; }
 
         .btn-waze {
-            display: inline-block; margin-top: 15px; padding: 16px 35px;
+            display: inline-block; margin-top: 15px; padding: 15px 30px;
             border: 1px solid var(--terracotta); color: var(--terracotta);
             text-decoration: none; font-family: 'Montserrat';
-            font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase;
+            font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
             transition: 0.4s;
         }
         .btn-waze:hover { background: var(--terracotta); color: white; }
@@ -72,43 +84,46 @@
         .family-grid { 
             display: flex; 
             justify-content: space-between; 
-            align-items: flex-start;
             text-align: left; 
-            font-size: 0.85rem; 
-            margin-bottom: 35px; 
-            line-height: 1.7; 
-            font-weight: 600; 
+            font-size: 0.8rem; 
+            margin-bottom: 30px; 
+            line-height: 1.6; 
+            font-weight: 600;
         }
+        .family-left { flex: 1.2; }
+        .family-right { flex: 0.8; text-align: right; }
         
-        .memory-text { font-style: italic; font-size: 0.95rem; color: #666; padding: 20px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 40px; }
+        .memory-text { font-style: italic; font-size: 0.9rem; color: #666; padding: 15px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 30px; }
 
-        /* RSVP */
+        /* Formulaire */
         .rsvp-form { text-align: left; }
-        .rsvp-form label { font-family: 'Montserrat'; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 30px; opacity: 0.7; font-weight: 600; }
+        .rsvp-form label.main-label { font-family: 'Montserrat'; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.8; font-weight: 600; }
         .rsvp-form input[type="text"], .rsvp-form textarea {
             width: 100%; border: none; border-bottom: 1px solid #ddd;
-            padding: 12px 0; font-family: 'Cormorant Garamond';
-            font-size: 1.6rem; outline: none; background: transparent;
+            padding: 10px 0; font-family: 'Cormorant Garamond';
+            font-size: 1.4rem; outline: none; background: transparent;
         }
-        .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: 0.5s ease; }
-        .conditional-field.show { max-height: 100px; opacity: 1; margin-top: 15px; }
+        
+        .radio-group { display: flex; gap: 30px; margin-top: 10px; font-family: 'Montserrat'; font-size: 0.85rem; }
+        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 400; }
+
+        .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: 0.4s ease-out; }
+        .conditional-field.show { max-height: 120px; opacity: 1; margin-top: 10px; }
+        
+        .nb-input { width: 100%; border: none; border-bottom: 1px solid #ddd; padding: 8px 0; font-family: 'Cormorant Garamond'; font-size: 1.3rem; background: transparent; outline: none; }
 
         .submit-btn {
             width: 100%; background: var(--terracotta); color: white;
-            border: none; padding: 25px; margin-top: 50px;
-            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 6px;
+            border: none; padding: 22px; margin-top: 45px;
+            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 5px;
             font-weight: 600; cursor: pointer; transition: 0.3s;
         }
 
         .music-control {
-            position: fixed; bottom: 30px; right: 30px; z-index: 2000;
-            display: flex; align-items: center; gap: 10px;
-            background: rgba(255,255,255,0.9); padding: 12px 20px;
+            position: fixed; bottom: 25px; right: 25px; z-index: 2000;
+            background: rgba(255,255,255,0.9); padding: 10px 15px;
             border-radius: 50px; border: 1px solid var(--terracotta); cursor: pointer;
         }
-        .bar { width: 3px; background: var(--terracotta); height: 12px; }
-        .playing .bar { animation: eq 0.8s infinite alternate; }
-        @keyframes eq { 0% { height: 3px; } 100% { height: 15px; } }
     </style>
 </head>
 <body>
@@ -116,14 +131,13 @@
     <audio id="bgMusic" loop><source src="musique2.mp3" type="audio/mpeg"></audio>
 
     <div class="music-control" id="musicBtn" onclick="toggleMusic()">
-        <div style="display:flex; gap:3px;" class="eq"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-        <span style="font-family:Montserrat; font-size:0.65rem; color:var(--terracotta); font-weight:600;" id="statusText">MUSIQUE OFF</span>
+        <span style="font-family:Montserrat; font-size:0.6rem; color:var(--terracotta); font-weight:600;" id="statusText">MUSIQUE OFF</span>
     </div>
 
     <div class="main-container">
         
         <section class="luxury-card">
-            <h2 class="royal-title">Mairie</h2>
+            <h2 class="royal-title section-title">Mairie</h2>
             <img src="photo-mairie.webp" class="section-img">
             <div class="details-luxe">
                 Nous serions ravis de vous compter parmi nous pour célébrer notre union qui sera suivie d'un <strong>vin d'honneur</strong>.<br><br>
@@ -145,21 +159,28 @@
 
         <section class="luxury-card">
             <img src="hebreu.png" class="hebrew-full">
-            <h2 class="royal-title">Houppa</h2>
+            <h2 class="royal-title section-title">Houppa</h2>
             <img src="photo-marie2.webp" class="section-img">
 
             <div class="family-grid">
-                <div>Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe</div>
-                <div style="text-align: right;">Madame Sonia Krief</div>
+                <div class="family-left">
+                    Mme Sophie Prajs<br>
+                    Mme Beatrice Philippe<br>
+                    Mme Nathalie Prajs & M. Eric Smadja<br>
+                    M et Mme Benjamin Philippe
+                </div>
+                <div class="family-right">
+                    Madame Sonia Krief
+                </div>
             </div>
 
             <div class="memory-text">
                 En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
             </div>
 
-            <p style="font-size:1.2rem; opacity:0.8; font-style: italic;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
+            <p style="font-size:1.1rem; opacity:0.8; font-style: italic;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
             
-            <h1 class="royal-title" style="font-size: 3.5rem; margin: 20px 0;">Emma & David</h1>
+            <h1 class="royal-title names-main">Emma & David</h1>
 
             <div class="details-luxe">
                 La cérémonie religieuse sera célébrée le<br>
@@ -170,54 +191,71 @@
         </section>
 
         <section class="luxury-card">
-            <h2 class="royal-title">Réponse</h2>
+            <h2 class="royal-title section-title">Réponse</h2>
             <img src="photo-marie.webp" class="section-img">
             <div class="rsvp-form">
                 <form id="rsvpForm">
-                    <label>Nom & Prénom</label>
+                    <label class="main-label">Nom & Prénom</label>
                     <input type="text" required placeholder="Votre nom">
                     
-                    <label>Présence Mairie ?</label>
-                    <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="m" onclick="toggleField('mf', true)" required> OUI</label>
-                        <label><input type="radio" name="m" onclick="toggleField('mf', false)"> NON</label>
+                    <label class="main-label">Présent à la mairie ?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="mairie" onclick="toggleField('mf', true)" required> OUI</label>
+                        <label><input type="radio" name="mairie" onclick="toggleField('mf', false)"> NON</label>
                     </div>
-                    <div id="mf" class="conditional-field"><label>Nombre de personnes</label><input type="number" min="1"></div>
-
-                    <label>Présence Houppa ?</label>
-                    <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="h" onclick="toggleField('hf', true)" required> OUI</label>
-                        <label><input type="radio" name="h" onclick="toggleField('hf', false)"> NON</label>
+                    <div id="mf" class="conditional-field">
+                        <label class="main-label">Nombre de personnes (Mairie)</label>
+                        <input type="number" min="1" class="nb-input">
                     </div>
-                    <div id="hf" class="conditional-field"><label>Nombre de personnes</label><input type="number" min="1"></div>
 
-                    <label>Un petit mot pour nous ?</label>
+                    <label class="main-label">Présent au Henné ?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="henne" onclick="toggleField('hef', true)" required> OUI</label>
+                        <label><input type="radio" name="henne" onclick="toggleField('hef', false)"> NON</label>
+                    </div>
+                    <div id="hef" class="conditional-field">
+                        <label class="main-label">Nombre de personnes (Henné)</label>
+                        <input type="number" min="1" class="nb-input">
+                    </div>
+
+                    <label class="main-label">Présent à la Houppa ?</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="houppa" onclick="toggleField('hf', true)" required> OUI</label>
+                        <label><input type="radio" name="houppa" onclick="toggleField('hf', false)"> NON</label>
+                    </div>
+                    <div id="hf" class="conditional-field">
+                        <label class="main-label">Nombre de personnes (Houppa)</label>
+                        <input type="number" min="1" class="nb-input">
+                    </div>
+
+                    <label class="main-label">Un petit mot pour nous ?</label>
                     <textarea placeholder="Votre message..."></textarea>
                     
-                    <button type="submit" class="submit-btn" id="btn-final">Confirmer ma présence</button>
+                    <button type="submit" class="submit-btn">Confirmer</button>
                 </form>
             </div>
         </section>
-
     </div>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Apparition des cartes au scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.luxury-card').forEach(card => observer.observe(card));
 
-        // Musique
         const music = document.getElementById('bgMusic');
         function toggleMusic() {
-            if (music.paused) { music.play(); document.getElementById('musicBtn').classList.add('playing'); document.getElementById('statusText').innerText="MUSIQUE ON"; }
-            else { music.pause(); document.getElementById('musicBtn').classList.remove('playing'); document.getElementById('statusText').innerText="MUSIQUE OFF"; }
+            if (music.paused) { music.play(); document.getElementById('statusText').innerText="MUSIQUE ON"; }
+            else { music.pause(); document.getElementById('statusText').innerText="MUSIQUE OFF"; }
         }
-        function toggleField(id, show) { document.getElementById(id).classList[show?'add':'remove']('show'); }
+        
+        function toggleField(id, show) {
+            const field = document.getElementById(id);
+            if(show) field.classList.add('show');
+            else field.classList.remove('show');
+        }
     </script>
 </body>
 </html>
-
