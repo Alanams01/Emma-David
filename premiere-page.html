@@ -4,14 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Emma & David — L'Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+    
     <style>
         :root {
             --terracotta: #b05d3e; 
             --bg: #f7f3f0; 
             --paper: #ffffff;
             --text: #3d3530;
-            --transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            --gold: #d4af37;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -24,164 +30,136 @@
             overflow-x: hidden;
         }
 
-        /* --- Filigrane Parallaxe --- */
+        /* --- MERCEDES CLASSE S GEANTE --- */
+        #svg-container {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 50;
+        }
+
+        #car-wrapper {
+            position: absolute; z-index: 100; will-change: transform; opacity: 0;
+        }
+
+        #car {
+            width: 220px; /* Voiture bien grande */
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+        }
+
+        /* --- DECORATIONS --- */
+        .flower-particle {
+            position: fixed; pointer-events: none; z-index: 1; opacity: 0.15; filter: sepia(0.5);
+        }
+
         .background-logo {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            opacity: 0.04;
-            z-index: -1;
-            pointer-events: none;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 70%; opacity: 0.04; z-index: -1; pointer-events: none;
         }
 
+        /* --- LAYOUT CARTES --- */
         .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 15px 120px;
-            gap: 60px;
+            position: relative; display: flex; flex-direction: column; align-items: center;
+            padding: 60px 15px 150px; gap: 120px; z-index: 60;
         }
 
-        /* --- Enveloppe Statique --- */
-        .static-envelope {
-            width: 280px;
-            height: 180px;
-            background: var(--terracotta);
-            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
-            position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 2px;
-            margin-bottom: 20px;
-        }
-        .static-envelope::after {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
-            background: rgba(0,0,0,0.03);
-        }
-        .static-envelope img {
-            width: 70px;
-            z-index: 2;
-            filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-
-        /* --- La Carte de Luxe --- */
         .luxury-card {
-            width: 100%;
-            max-width: 420px;
+            width: 100%; max-width: 450px;
             background: var(--paper);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 50px 20px; /* Réduit pour plus de sécurité */
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
-            text-align: center;
-            border: 1px solid rgba(176, 93, 62, 0.15);
-            opacity: 0;
-            transform: translateY(40px);
-            transition: var(--transition);
-            overflow: hidden;
+            padding: 50px 25px; position: relative;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.06);
+            text-align: center; border: 1px solid rgba(176, 93, 62, 0.12);
+            opacity: 0; 
+            transition: all 1.2s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
-        .luxury-card.visible { opacity: 1; transform: translateY(0); }
+        /* Effet Léa Style glissement */
+        .luxury-card:nth-child(even) { transform: translateX(-80px); }
+        .luxury-card:nth-child(odd) { transform: translateX(80px); }
+        .luxury-card.visible { opacity: 1; transform: translateX(0); }
 
-        .royal-title { 
-            font-family: 'Great Vibes'; 
-            font-size: 2.2rem; /* Réduit encore pour éviter toute morsure */
-            color: var(--terracotta); 
-            margin: 10px 0; 
-            white-space: nowrap;
-            padding: 0 10px; /* Marge interne de sécurité */
+        .section-img {
+            width: 100%; height: 280px; object-fit: cover;
+            border-radius: 2px; margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .subtitle {
-            font-family: 'Montserrat';
-            font-size: 0.7rem;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            color: var(--terracotta);
-            margin-bottom: 25px;
-        }
+        .hebrew-full { width: 100%; height: auto; margin-bottom: 40px; }
 
-        .details-luxe { font-size: 1.3rem; line-height: 1.7; font-weight: 300; }
-        .sep { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 35px auto; }
+        .royal-title { font-family: 'Great Vibes'; font-size: 2.8rem; color: var(--terracotta); margin: 15px 0; }
+        .details-luxe { font-size: 1.5rem; line-height: 1.8; font-weight: 300; }
+        .sep { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 40px auto; }
 
         .btn-waze {
-            display: inline-block; margin-top: 20px; padding: 14px 30px;
+            display: inline-block; margin-top: 25px; padding: 16px 35px;
             border: 1px solid var(--terracotta); color: var(--terracotta);
             text-decoration: none; font-family: 'Montserrat';
-            font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
-            transition: 0.3s;
+            font-size: 0.75rem; letter-spacing: 4px; text-transform: uppercase;
+            transition: 0.4s;
         }
+        .btn-waze:hover { background: var(--terracotta); color: white; }
 
-        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px; line-height: 1.6; }
-        .memory-text { font-style: italic; font-size: 0.85rem; color: #777; padding: 15px 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; margin-bottom: 30px; }
+        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.85rem; margin-bottom: 35px; line-height: 1.7; font-weight: 600; }
+        .memory-text { font-style: italic; font-size: 0.95rem; color: #666; padding: 20px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 40px; }
 
-        /* RSVP Form */
+        /* --- FORMULAIRE RSVP --- */
         .rsvp-form { text-align: left; }
-        .rsvp-form label { font-family: 'Montserrat'; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.6; }
-        .rsvp-form input, .rsvp-form textarea {
+        .rsvp-form label { font-family: 'Montserrat'; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 30px; opacity: 0.7; font-weight: 600; }
+        .rsvp-form input[type="text"], .rsvp-form textarea {
             width: 100%; border: none; border-bottom: 1px solid #ddd;
             padding: 12px 0; font-family: 'Cormorant Garamond';
-            font-size: 1.4rem; outline: none; background: transparent;
+            font-size: 1.6rem; outline: none; background: transparent;
         }
-
-        .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: all 0.5s ease; }
-        .conditional-field.show { max-height: 100px; opacity: 1; margin-top: 10px; }
+        .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: 0.5s ease; }
+        .conditional-field.show { max-height: 100px; opacity: 1; margin-top: 15px; }
 
         .submit-btn {
             width: 100%; background: var(--terracotta); color: white;
-            border: none; padding: 20px; margin-top: 40px;
-            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 5px;
-            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            border: none; padding: 25px; margin-top: 50px;
+            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 6px;
+            font-weight: 600; cursor: pointer; transition: 0.3s;
         }
 
-        /* --- Bouton Musique --- */
+        /* --- MUSIQUE --- */
         .music-control {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 45px;
-            height: 45px;
-            background: var(--paper);
-            border: 1px solid var(--terracotta);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            position: fixed; bottom: 30px; right: 30px; z-index: 2000;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.9); padding: 12px 20px;
+            border-radius: 50px; border: 1px solid var(--terracotta); cursor: pointer;
         }
-        .music-control svg { width: 20px; fill: var(--terracotta); }
-        .music-control.muted svg { opacity: 0.4; }
-
+        .bar { width: 3px; background: var(--terracotta); height: 12px; }
+        .playing .bar { animation: eq 0.8s infinite alternate; }
+        @keyframes eq { 0% { height: 3px; } 100% { height: 15px; } }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop>
-        <source src="musique.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bgMusic" loop><source src="musique.mp3" type="audio/mpeg"></audio>
 
     <div class="music-control" id="musicBtn" onclick="toggleMusic()">
-        <svg id="icon-play" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <div style="display:flex; gap:3px;" class="eq"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+        <span style="font-family:Montserrat; font-size:0.65rem; color:var(--terracotta); font-weight:600;" id="statusText">MUSIQUE OFF</span>
     </div>
 
-    <img src="logo.png" id="bg-logo" class="background-logo" alt="">
+    <svg id="svg-container">
+        <path id="road-path" fill="none" stroke="none" />
+    </svg>
+    <div id="car-wrapper">
+        <img id="car" src="voiture.png" alt="Mercedes S Class">
+    </div>
+
+    <img src="https://www.transparenttextures.com/patterns/flowers.png" class="flower-particle" style="top:10%; left:-30px; width:180px;">
+    <img src="https://www.transparenttextures.com/patterns/flowers.png" class="flower-particle" style="top:50%; right:-30px; width:220px;">
+    <img src="logo.png" class="background-logo">
 
     <div class="main-container">
-
-        <div class="static-envelope">
-            <img src="logo.png" alt="Logo">
+        
+        <div style="width:280px; height:180px; background:var(--terracotta); display:flex; justify-content:center; align-items:center; border-radius:2px; box-shadow:0 10px 30px rgba(0,0,0,0.15);">
+            <img src="logo.png" width="75" style="filter:brightness(0) invert(1);">
         </div>
 
-        <section class="luxury-card">
+        <section class="luxury-card" id="section-mairie">
+            <img src="photo-mairie.webp" class="section-img">
             <h2 class="royal-title">Mairie</h2>
             <div class="details-luxe">
                 Nous serions ravis de vous compter parmi nous pour célébrer notre union qui sera suivie d'un <strong>vin d'honneur</strong>.<br><br>
@@ -190,7 +168,9 @@
                 96 Av. Achille Peretti
             </div>
             <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="btn-waze">Itinéraire Mairie</a>
+            
             <div class="sep"></div>
+            
             <div class="details-luxe">
                 La cérémonie sera suivie d'un henné à <strong>17h30</strong><br>
                 à l'<strong>ACCIL - Rooftop</strong><br>
@@ -200,28 +180,32 @@
         </section>
 
         <section class="luxury-card">
-            <img src="hebreu.png" style="width: 180px; margin-bottom: 30px;">
+            <img src="hebreu.png" class="hebrew-full">
             <h2 class="royal-title">Houppa</h2>
+
             <div class="family-grid">
                 <div>Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe</div>
                 <div style="text-align: right;">Madame Sonia Krief</div>
             </div>
-            <div class="memory-text">En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.</div>
-            <p class="details-luxe" style="font-size: 1.1rem; opacity: 0.8;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
-            <h1 class="royal-title">Emma & David</h1>
+
+            <div class="memory-text">
+                En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
+            </div>
+
+            <p style="font-size:1.2rem; opacity:0.8; font-style: italic;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
+            <h1 class="royal-title" style="font-size: 4rem; margin: 25px 0;">Emma & David</h1>
+
             <div class="details-luxe">
                 La cérémonie religieuse sera célébrée le<br>
                 <strong>Dimanche 18 Octobre à 17h00 précises</strong><br><br>
-                Suivi de la réception au<br>
-                <strong>Grand Hôtel</strong><br>
-                2 rue Scribe, Paris
+                Suivi de la réception au<br><strong>Grand Hôtel</strong><br>2 rue Scribe, Paris
             </div>
             <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="btn-waze">Itinéraire Houppa</a>
         </section>
 
         <section class="luxury-card">
+            <img src="photo-marie.webp" class="section-img">
             <h2 class="royal-title">Réponse</h2>
-            <p class="subtitle">RSVP</p>
             <div class="rsvp-form">
                 <form id="rsvpForm">
                     <label>Nom & Prénom</label>
@@ -229,69 +213,79 @@
                     
                     <label>Présence Mairie ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="m" onclick="toggleField('mairieField', true)" required> OUI</label>
-                        <label><input type="radio" name="m" onclick="toggleField('mairieField', false)"> NON</label>
+                        <label><input type="radio" name="m" onclick="toggleField('mf', true)" required> OUI</label>
+                        <label><input type="radio" name="m" onclick="toggleField('mf', false)"> NON</label>
                     </div>
-                    <div id="mairieField" class="conditional-field">
-                        <label>Nombre de personnes (Mairie)</label>
-                        <input type="number" min="1" placeholder="Ex: 2">
-                    </div>
+                    <div id="mf" class="conditional-field"><label>Nombre de personnes</label><input type="number" min="1"></div>
 
                     <label>Présence Houppa ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="h" onclick="toggleField('houppaField', true)" required> OUI</label>
-                        <label><input type="radio" name="h" onclick="toggleField('houppaField', false)"> NON</label>
+                        <label><input type="radio" name="h" onclick="toggleField('hf', true)" required> OUI</label>
+                        <label><input type="radio" name="h" onclick="toggleField('hf', false)"> NON</label>
                     </div>
-                    <div id="houppaField" class="conditional-field">
-                        <label>Nombre de personnes (Houppa)</label>
-                        <input type="number" min="1" placeholder="Ex: 2">
-                    </div>
+                    <div id="hf" class="conditional-field"><label>Nombre de personnes</label><input type="number" min="1"></div>
 
                     <label>Un petit mot pour nous ?</label>
                     <textarea placeholder="Votre message..."></textarea>
-                    <button type="submit" class="submit-btn">Confirmer</button>
+                    
+                    <button type="submit" class="submit-btn" id="btn-final">Confirmer ma présence</button>
                 </form>
             </div>
         </section>
+
     </div>
 
     <script>
-        const music = document.getElementById('bgMusic');
-        let musicStarted = false;
+        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
-        // Lance la musique au premier scroll
-        window.addEventListener('scroll', () => {
-            if (!musicStarted) {
-                music.play().catch(() => {}); // Gère le blocage auto des navigateurs
-                musicStarted = true;
-            }
-            const logo = document.getElementById('bg-logo');
-            logo.style.transform = `translate(-50%, -50%) translateY(${window.pageYOffset * 0.05}px)`;
-        }, { passive: true });
+        window.addEventListener("load", function() {
+            const mairie = document.getElementById('section-mairie');
+            const finalBtn = document.getElementById('btn-final');
+            const car = document.getElementById('car-wrapper');
+            const path = document.getElementById('road-path');
 
-        function toggleMusic() {
-            const btn = document.getElementById('musicBtn');
-            if (music.paused) {
-                music.play();
-                btn.classList.remove('muted');
-            } else {
-                music.pause();
-                btn.classList.add('muted');
-            }
-        }
+            const startY = mairie.offsetTop;
+            const endY = finalBtn.getBoundingClientRect().top + window.scrollY;
+            const distance = endY - startY;
+            const w = window.innerWidth;
 
-        function toggleField(id, show) {
-            const field = document.getElementById(id);
-            show ? field.classList.add('show') : field.classList.remove('show');
-        }
+            // --- TRACÉ SLALOM ÉLÉGANT ---
+            const d = `
+                M ${w*0.5} ${startY} 
+                C ${w*0.9} ${startY + distance*0.2}, ${w*0.9} ${startY + distance*0.3}, ${w*0.5} ${startY + distance*0.4}
+                S ${w*0.1} ${startY + distance*0.6}, ${w*0.5} ${startY + distance*0.7}
+                S ${w*0.9} ${startY + distance*0.9}, ${w*0.5} ${endY}
+            `;
+            path.setAttribute('d', d);
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) entry.target.classList.add('visible');
+            gsap.to(car, {
+                scrollTrigger: {
+                    trigger: "body",
+                    start: `${startY} center`, 
+                    end: `${endY} center`,   
+                    scrub: 1.5,
+                    onUpdate: self => {
+                        car.style.opacity = (self.progress > 0.01 && self.progress < 0.99) ? 1 : 0;
+                    }
+                },
+                motionPath: { path: path, autoRotate: false, alignOrigin: [0.5, 0.5] },
+                ease: "none"
             });
-        }, { threshold: 0.1 });
+        });
 
+        // Apparition des cartes
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
         document.querySelectorAll('.luxury-card').forEach(card => observer.observe(card));
+
+        // Musique & Formulaire
+        const music = document.getElementById('bgMusic');
+        function toggleMusic() {
+            if (music.paused) { music.play(); document.getElementById('musicBtn').classList.add('playing'); document.getElementById('statusText').innerText="MUSIQUE ON"; }
+            else { music.pause(); document.getElementById('musicBtn').classList.remove('playing'); document.getElementById('statusText').innerText="MUSIQUE OFF"; }
+        }
+        function toggleField(id, show) { document.getElementById(id).classList[show?'add':'remove']('show'); }
     </script>
 </body>
 </html>
