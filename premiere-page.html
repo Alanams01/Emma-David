@@ -16,7 +16,6 @@
             --bg: #f7f3f0; 
             --paper: #ffffff;
             --text: #3d3530;
-            --gold: radial-gradient(circle, #f0d58e 0%, #d4af37 100%);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,17 +26,6 @@
             color: var(--text);
             font-family: 'Cormorant Garamond', serif;
             overflow-x: hidden;
-        }
-
-        /* --- EFFET PLUIE D'OR --- */
-        .gold-drop {
-            position: fixed;
-            top: -20px;
-            pointer-events: none;
-            z-index: 1;
-            background: var(--gold);
-            border-radius: 50%;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
         }
 
         /* --- LAYOUT CARTES --- */
@@ -68,9 +56,9 @@
         }
 
         .hebrew-full { width: 100%; height: auto; margin-bottom: 10px; }
-        .royal-title { font-family: 'Great Vibes'; font-size: 3.2rem; color: var(--terracotta); margin: 5px 0; }
+        .royal-title { font-family: 'Great Vibes'; font-size: 3rem; color: var(--terracotta); margin: 5px 0; white-space: nowrap; }
         .details-luxe { font-size: 1.5rem; line-height: 1.8; font-weight: 300; }
-        .sep { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 35px auto; }
+        .sep { width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 30px auto; }
 
         .btn-waze {
             display: inline-block; margin-top: 15px; padding: 16px 35px;
@@ -81,7 +69,17 @@
         }
         .btn-waze:hover { background: var(--terracotta); color: white; }
 
-        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.85rem; margin-bottom: 35px; line-height: 1.7; font-weight: 600; }
+        .family-grid { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start;
+            text-align: left; 
+            font-size: 0.85rem; 
+            margin-bottom: 35px; 
+            line-height: 1.7; 
+            font-weight: 600; 
+        }
+        
         .memory-text { font-style: italic; font-size: 0.95rem; color: #666; padding: 20px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 40px; }
 
         /* RSVP */
@@ -149,15 +147,20 @@
             <img src="hebreu.png" class="hebrew-full">
             <h2 class="royal-title">Houppa</h2>
             <img src="photo-marie2.webp" class="section-img">
+
             <div class="family-grid">
                 <div>Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe</div>
                 <div style="text-align: right;">Madame Sonia Krief</div>
             </div>
+
             <div class="memory-text">
                 En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
             </div>
+
             <p style="font-size:1.2rem; opacity:0.8; font-style: italic;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
-            <h1 class="royal-title" style="font-size: 3.8rem; margin: 20px 0;">Emma & David</h1>
+            
+            <h1 class="royal-title" style="font-size: 3.5rem; margin: 20px 0;">Emma & David</h1>
+
             <div class="details-luxe">
                 La cérémonie religieuse sera célébrée le<br>
                 <strong>Dimanche 18 Octobre à 17h00 précises</strong><br><br>
@@ -173,70 +176,35 @@
                 <form id="rsvpForm">
                     <label>Nom & Prénom</label>
                     <input type="text" required placeholder="Votre nom">
+                    
                     <label>Présence Mairie ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
                         <label><input type="radio" name="m" onclick="toggleField('mf', true)" required> OUI</label>
                         <label><input type="radio" name="m" onclick="toggleField('mf', false)"> NON</label>
                     </div>
                     <div id="mf" class="conditional-field"><label>Nombre de personnes</label><input type="number" min="1"></div>
+
                     <label>Présence Houppa ?</label>
                     <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
                         <label><input type="radio" name="h" onclick="toggleField('hf', true)" required> OUI</label>
                         <label><input type="radio" name="h" onclick="toggleField('hf', false)"> NON</label>
                     </div>
                     <div id="hf" class="conditional-field"><label>Nombre de personnes</label><input type="number" min="1"></div>
-                    <label>Un petit mot ?</label>
+
+                    <label>Un petit mot pour nous ?</label>
                     <textarea placeholder="Votre message..."></textarea>
+                    
                     <button type="submit" class="submit-btn" id="btn-final">Confirmer ma présence</button>
                 </form>
             </div>
         </section>
+
     </div>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // --- GÉNÉRATION DE LA PLUIE D'OR ---
-        function createGoldDrop() {
-            const drop = document.createElement('div');
-            drop.classList.add('gold-drop');
-            
-            // Paramètres aléatoires
-            const size = Math.random() * 6 + 2; // de 2 à 8px
-            const startX = Math.random() * 100; // Position x en %
-            const duration = Math.random() * 3 + 4; // de 4 à 7 secondes
-            const opacity = Math.random() * 0.5 + 0.3;
-
-            drop.style.width = size + "px";
-            drop.style.height = size + "px";
-            drop.style.left = startX + "vw";
-            drop.style.opacity = opacity;
-
-            document.body.appendChild(drop);
-
-            // Animation GSAP
-            gsap.to(drop, {
-                y: "110vh",
-                x: (Math.random() - 0.5) * 100, // Oscillation
-                rotation: Math.random() * 360,
-                ease: "power1.in",
-                duration: duration,
-                onComplete: () => drop.remove()
-            });
-
-            // Effet de scintillement
-            gsap.to(drop, {
-                opacity: 0.1,
-                duration: Math.random() * 0.5 + 0.5,
-                repeat: -1,
-                yoyo: true
-            });
-        }
-
-        // Création continue de gouttes
-        setInterval(createGoldDrop, 150);
-
-        // Animation des cartes
+        // Apparition des cartes au scroll
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1 });
