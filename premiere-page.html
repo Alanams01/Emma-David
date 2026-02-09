@@ -98,7 +98,7 @@
         /* Formulaire */
         .rsvp-form { text-align: left; }
         .rsvp-form label.main-label { font-family: 'Montserrat'; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.8; font-weight: 600; }
-        .rsvp-form input[type="text"], .rsvp-form textarea {
+        .rsvp-form input[type="text"], .rsvp-form input[type="number"], .rsvp-form textarea {
             width: 100%; border: none; border-bottom: 1px solid #ddd;
             padding: 10px 0; font-family: 'Cormorant Garamond';
             font-size: 1.4rem; outline: none; background: transparent;
@@ -118,6 +118,7 @@
             font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 5px;
             font-weight: 600; cursor: pointer; transition: 0.3s;
         }
+        .submit-btn:disabled { background: #999; cursor: not-allowed; }
 
         .music-control {
             position: fixed; bottom: 25px; right: 25px; z-index: 2000;
@@ -154,7 +155,7 @@
                 à l'<strong>ACCIL - Rooftop</strong><br>
                 10 rue baudin, Levallois
             </div>
-            <a href="https://waze.com/ul?q=63+Rue+Louis+Rouquier+Levallois" class="btn-waze">Itinéraire Rooftop</a>
+            <a href="https://waze.com/ul?q=10+rue+baudin+Levallois" class="btn-waze">Itinéraire Rooftop</a>
         </section>
 
         <section class="luxury-card">
@@ -195,43 +196,45 @@
             <img src="photo-marie.webp" class="section-img">
             <div class="rsvp-form">
                 <form id="rsvpForm">
+                    <input type="text" name="honeypot" style="display:none !important" tabindex="-1" autocomplete="off">
+
                     <label class="main-label">Nom & Prénom</label>
-                    <input type="text" required placeholder="Votre nom">
+                    <input type="text" name="nom" required placeholder="Votre nom">
                     
                     <label class="main-label">Présent à la mairie ?</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="mairie" onclick="toggleField('mf', true)" required> OUI</label>
-                        <label><input type="radio" name="mairie" onclick="toggleField('mf', false)"> NON</label>
+                        <label><input type="radio" name="mairie" value="OUI" onclick="toggleField('mf', true)" required> OUI</label>
+                        <label><input type="radio" name="mairie" value="NON" onclick="toggleField('mf', false)"> NON</label>
                     </div>
                     <div id="mf" class="conditional-field">
                         <label class="main-label">Nombre de personnes (Mairie)</label>
-                        <input type="number" min="1" class="nb-input">
+                        <input type="number" name="nb_mairie" min="1" class="nb-input">
                     </div>
 
                     <label class="main-label">Présent au Henné ?</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="henne" onclick="toggleField('hef', true)" required> OUI</label>
-                        <label><input type="radio" name="henne" onclick="toggleField('hef', false)"> NON</label>
+                        <label><input type="radio" name="henne" value="OUI" onclick="toggleField('hef', true)" required> OUI</label>
+                        <label><input type="radio" name="henne" value="NON" onclick="toggleField('hef', false)"> NON</label>
                     </div>
                     <div id="hef" class="conditional-field">
                         <label class="main-label">Nombre de personnes (Henné)</label>
-                        <input type="number" min="1" class="nb-input">
+                        <input type="number" name="nb_henne" min="1" class="nb-input">
                     </div>
 
                     <label class="main-label">Présent à la Houppa ?</label>
                     <div class="radio-group">
-                        <label><input type="radio" name="houppa" onclick="toggleField('hf', true)" required> OUI</label>
-                        <label><input type="radio" name="houppa" onclick="toggleField('hf', false)"> NON</label>
+                        <label><input type="radio" name="houppa" value="OUI" onclick="toggleField('hf', true)" required> OUI</label>
+                        <label><input type="radio" name="houppa" value="NON" onclick="toggleField('hf', false)"> NON</label>
                     </div>
                     <div id="hf" class="conditional-field">
                         <label class="main-label">Nombre de personnes (Houppa)</label>
-                        <input type="number" min="1" class="nb-input">
+                        <input type="number" name="nb_houppa" min="1" class="nb-input">
                     </div>
 
                     <label class="main-label">Un petit mot pour nous ?</label>
-                    <textarea placeholder="Votre message..."></textarea>
+                    <textarea name="message" placeholder="Votre message..."></textarea>
                     
-                    <button type="submit" class="submit-btn">Confirmer</button>
+                    <button type="submit" id="submitBtn" class="submit-btn">Confirmer</button>
                 </form>
             </div>
         </section>
@@ -256,7 +259,35 @@
             if(show) field.classList.add('show');
             else field.classList.remove('show');
         }
+
+        // --- GESTION DE L'ENVOI AU GOOGLE SHEET ---
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyvT7vXpmdPnPiFf9nPkyGQt1G8HGb6SLCT5yH4nMLNJS8uUngvtu5ZASOa2PwLvdIszw/exec';
+        const form = document.getElementById('rsvpForm');
+        const btn = document.getElementById('submitBtn');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+
+            // Sécurité anti-robot simple
+            if (form.honeypot.value !== "") return;
+
+            btn.disabled = true;
+            btn.innerText = "ENVOI EN COURS...";
+
+            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+                .then(response => {
+                    btn.innerText = "MERCI, C'EST ENREGISTRÉ !";
+                    btn.style.background = "#27ae60"; // Vert pour le succès
+                    form.reset();
+                    // On referme les champs optionnels
+                    document.querySelectorAll('.conditional-field').forEach(f => f.classList.remove('show'));
+                })
+                .catch(error => {
+                    console.error('Erreur!', error.message);
+                    btn.disabled = false;
+                    btn.innerText = "ERREUR - RÉESSAYER";
+                });
+        });
     </script>
 </body>
 </html>
-
