@@ -56,17 +56,31 @@
 
         .hebrew-full { width: 100%; height: auto; margin-bottom: 15px; }
         
+        /* Styles calligraphie marron */
+        .mairie-names { 
+            font-family: 'Great Vibes'; 
+            color: var(--terracotta); 
+            font-size: 2.6rem; 
+            display: block;
+            margin-bottom: 5px;
+        }
+        .mairie-oui { 
+            font-family: 'Cormorant Garamond'; 
+            font-size: 1.3rem; 
+            color: var(--text); 
+            font-style: italic;
+            display: block;
+            margin-bottom: 15px;
+        }
+
         .royal-title { 
             font-family: 'Great Vibes'; 
             color: var(--terracotta); 
             margin: 10px 0; 
-            white-space: nowrap;
-            display: block;
-            width: 100%;
             text-align: center;
         }
-        
-        .names-main { font-size: 3.2rem; }
+
+        .names-main { font-size: 3.2rem; white-space: nowrap; }
         .section-title { font-size: 2.8rem; }
 
         .details-luxe { font-size: 1.4rem; line-height: 1.7; font-weight: 300; }
@@ -95,7 +109,6 @@
         
         .memory-text { font-style: italic; font-size: 0.9rem; color: #666; padding: 15px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 30px; }
 
-        /* Formulaire */
         .rsvp-form { text-align: left; }
         .rsvp-form label.main-label { font-family: 'Montserrat'; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.8; font-weight: 600; }
         .rsvp-form input[type="text"], .rsvp-form input[type="number"], .rsvp-form textarea {
@@ -104,21 +117,18 @@
             font-size: 1.4rem; outline: none; background: transparent;
         }
         
-        .radio-group { display: flex; gap: 30px; margin-top: 10px; font-family: 'Montserrat'; font-size: 0.85rem; }
+        .radio-group { display: flex; gap: 20px; margin-top: 10px; font-family: 'Montserrat'; font-size: 0.85rem; }
         .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 400; }
 
         .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: 0.4s ease-out; }
         .conditional-field.show { max-height: 120px; opacity: 1; margin-top: 10px; }
         
-        .nb-input { width: 100%; border: none; border-bottom: 1px solid #ddd; padding: 8px 0; font-family: 'Cormorant Garamond'; font-size: 1.3rem; background: transparent; outline: none; }
-
         .submit-btn {
             width: 100%; background: var(--terracotta); color: white;
             border: none; padding: 22px; margin-top: 45px;
             font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 5px;
             font-weight: 600; cursor: pointer; transition: 0.3s;
         }
-        .submit-btn:disabled { background: #999; cursor: not-allowed; }
 
         .music-control {
             position: fixed; bottom: 25px; right: 25px; z-index: 2000;
@@ -139,10 +149,14 @@
         
         <section class="luxury-card">
             <h2 class="royal-title section-title">Mairie</h2>
+            
             <img src="photo-mairie.webp" class="section-img">
+            
             <div class="details-luxe">
-                Nous serions ravis de vous compter parmi nous pour célébrer notre union qui sera suivie d'un <strong>vin d'honneur</strong>.<br><br>
-                <strong>Le jeudi 03 septembre 2026<br>à 15h30 précises</strong><br><br>
+                <span class="mairie-names">Emma & David</span>
+                <span class="mairie-oui">se diront oui</span>
+                
+                le jeudi 03 septembre 2026 à 15h30<br>
                 À la mairie de Neuilly-sur-Seine<br>
                 96 Av. Achille Peretti
             </div>
@@ -197,7 +211,6 @@
             <div class="rsvp-form">
                 <form id="rsvpForm">
                     <input type="text" name="honeypot" style="display:none !important" tabindex="-1" autocomplete="off">
-
                     <label class="main-label">Nom & Prénom</label>
                     <input type="text" name="nom" required placeholder="Votre nom">
                     
@@ -208,7 +221,7 @@
                     </div>
                     <div id="mf" class="conditional-field">
                         <label class="main-label">Nombre de personnes (Mairie)</label>
-                        <input type="number" name="nb_mairie" min="1" class="nb-input">
+                        <input type="number" name="nb_mairie" min="1">
                     </div>
 
                     <label class="main-label">Présent au Henné ?</label>
@@ -218,7 +231,7 @@
                     </div>
                     <div id="hef" class="conditional-field">
                         <label class="main-label">Nombre de personnes (Henné)</label>
-                        <input type="number" name="nb_henne" min="1" class="nb-input">
+                        <input type="number" name="nb_henne" min="1">
                     </div>
 
                     <label class="main-label">Présent à la Houppa ?</label>
@@ -228,7 +241,7 @@
                     </div>
                     <div id="hf" class="conditional-field">
                         <label class="main-label">Nombre de personnes (Houppa)</label>
-                        <input type="number" name="nb_houppa" min="1" class="nb-input">
+                        <input type="number" name="nb_houppa" min="1">
                     </div>
 
                     <label class="main-label">Un petit mot pour nous ?</label>
@@ -241,8 +254,6 @@
     </div>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger);
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
         }, { threshold: 0.1 });
@@ -260,30 +271,23 @@
             else field.classList.remove('show');
         }
 
-        // --- GESTION DE L'ENVOI AU GOOGLE SHEET ---
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyvT7vXpmdPnPiFf9nPkyGQt1G8HGb6SLCT5yH4nMLNJS8uUngvtu5ZASOa2PwLvdIszw/exec';
         const form = document.getElementById('rsvpForm');
         const btn = document.getElementById('submitBtn');
 
         form.addEventListener('submit', e => {
             e.preventDefault();
-
-            // Sécurité anti-robot simple
             if (form.honeypot.value !== "") return;
-
             btn.disabled = true;
             btn.innerText = "ENVOI EN COURS...";
-
             fetch(scriptURL, { method: 'POST', body: new FormData(form)})
                 .then(response => {
                     btn.innerText = "MERCI, C'EST ENREGISTRÉ !";
-                    btn.style.background = "#27ae60"; // Vert pour le succès
+                    btn.style.background = "#27ae60";
                     form.reset();
-                    // On referme les champs optionnels
                     document.querySelectorAll('.conditional-field').forEach(f => f.classList.remove('show'));
                 })
                 .catch(error => {
-                    console.error('Erreur!', error.message);
                     btn.disabled = false;
                     btn.innerText = "ERREUR - RÉESSAYER";
                 });
