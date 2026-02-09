@@ -3,266 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Emma & David — L'Invitation</title>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
-    
+    <title>Emma & David — 18.10.2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --terracotta: #b05d3e; 
-            --bg: #f7f3f0; 
+            --envelope-color: #b05d3e; 
+            --envelope-border: #964f35;
             --paper: #ffffff;
-            --text: #3d3530;
-            --transition: all 1s cubic-bezier(0.2, 1, 0.3, 1);
+            --bg-color: #f7f3f0;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html { 
-            margin: 0; padding: 0; 
-            background-color: var(--bg); 
-            color: var(--text);
-            font-family: 'Cormorant Garamond', serif;
-            overflow-x: hidden;
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            background-color: var(--bg-color);
+            font-family: 'Montserrat', sans-serif;
+            display: flex; justify-content: center; align-items: center; 
+            overflow: hidden;
         }
 
-        /* --- MERCEDES CLASSE S ZIGZAG --- */
-        #svg-container {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+        /* --- LE FLASH LUMINEUX --- */
+        .flash-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: 1000;
             pointer-events: none;
-            z-index: 50;
         }
 
-        #car {
-            width: 250px; /* Meilleure résolution/visibilité */
-            position: absolute;
-            z-index: 40; /* En dessous des sections (z-index 60) pour passer derrière */
-            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.8)) blur(1px); /* Effet dynamique */
-            will-change: transform;
-            opacity: 0; /* Voiture invisible au début */
-            transform: translateY(-50px); /* Légèrement hors vue pour un effet d'apparition */
+        .show-flash { animation: flashAnim 0.7s ease-out forwards; }
+        @keyframes flashAnim {
+            0% { opacity: 0; }
+            40% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
-        /* --- FILIGRANE & DÉCORATION --- */
-        .flower-particle {
-            position: fixed; pointer-events: none; z-index: 0; opacity: 0.15; filter: sepia(0.5);
-        }
-
-        .background-logo {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 80%; opacity: 0.04; z-index: -1; pointer-events: none;
-        }
-
-        /* --- CONTENU --- */
-        .main-container {
+        .main-wrapper {
             position: relative;
-            display: flex; flex-direction: column; align-items: center;
-            padding: 40px 15px 120px; gap: 100px; z-index: 60;
-        }
-
-        .static-envelope {
-            width: 280px; height: 180px;
-            background: var(--terracotta);
-            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
-            position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
-            border-radius: 2px; margin-bottom: 20px;
         }
-        .static-envelope img { width: 70px; filter: brightness(0) invert(1); }
 
-        .luxury-card {
-            width: 100%; max-width: 420px;
+        /* --- L'ENVELOPPE QUI CACHE TOUT --- */
+        .envelope-container {
+            position: relative;
+            width: 350px; height: 240px;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .envelope-body {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: var(--envelope-color);
+            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
+            border: 1px solid var(--envelope-border);
+            border-radius: 4px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            z-index: 2;
+        }
+
+        /* Rabat supérieur */
+        .flap {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--envelope-color);
+            background-image: url('https://www.transparenttextures.com/patterns/linen-paper.png');
+            clip-path: polygon(0 0, 100% 0, 50% 60%);
+            transform-origin: top;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 4;
+        }
+
+        /* Le Sceau Logo */
+        .seal {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -40%);
+            z-index: 5;
+            transition: all 0.4s ease;
+        }
+        .seal img { width: 80px; filter: brightness(0) invert(1) drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+
+        /* --- LA CARTE SURPRISE (INVISIBLE AU DÉPART) --- */
+        .card {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 90vw; max-width: 400px;
+            height: 580px;
             background: var(--paper);
             background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-            padding: 40px 20px; position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
-            text-align: center; border: 1px solid rgba(176, 93, 62, 0.15);
-            opacity: 0; transition: var(--transition);
+            transform: translate(-50%, -50%) scale(0); /* Cachée */
+            opacity: 0;
+            z-index: 50;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.25);
+            transition: all 0.9s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; align-items: center;
+            border: 1px solid #eee;
         }
 
-        /* Animation Léa-style (glissement) */
-        .luxury-card:nth-child(even) { transform: translateX(-60px); }
-        .luxury-card:nth-child(odd) { transform: translateX(60px); }
-        .luxury-card.visible { opacity: 1; transform: translateX(0); }
-
-        .section-img {
-            width: 100%; height: 250px; object-fit: cover;
-            object-position: center 30%; border-radius: 2px; margin-bottom: 25px;
-            transform: rotate(0deg); /* Image toujours droite */
+        .couple-photo {
+            width: 100%; height: 320px;
+            background: url('photo-marie2.webp') no-repeat center center;
+            background-size: cover;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .hebrew-full { width: 100%; height: auto; margin-bottom: 30px; }
+        .card h2 { font-family: 'Great Vibes', cursive; color: var(--terracotta); font-size: 3.2rem; margin: 0; }
+        .card p { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; color: #666; margin-top: 10px; }
 
-        .royal-title { font-family: 'Great Vibes'; font-size: 2.4rem; color: var(--terracotta); margin: 10px 0; }
-        .details-luxe { font-size: 1.3rem; line-height: 1.7; font-weight: 300; }
-        .sep { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--terracotta), transparent); margin: 35px auto; }
+        .btn-enter {
+            margin-top: auto;
+            background: var(--envelope-color);
+            color: white; border: none;
+            padding: 18px 45px; border-radius: 40px;
+            font-size: 0.8rem; letter-spacing: 4px; text-transform: uppercase;
+            cursor: pointer; transition: 0.3s;
+            font-weight: 600;
+        }
+        .btn-enter:hover { transform: scale(1.05); filter: brightness(1.1); }
 
-        .btn-waze {
-            display: inline-block; margin-top: 20px; padding: 14px 30px;
-            border: 1px solid var(--terracotta); color: var(--terracotta);
-            text-decoration: none; font-family: 'Montserrat';
-            font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase;
+        /* --- ÉTATS D'ANIMATION --- */
+        .opened .flap { transform: rotateX(180deg); }
+        .opened .seal { opacity: 0; transform: translate(-50%, -150%) scale(0.5); }
+        
+        /* Apparition de la carte après le flash */
+        .reveal-card .card {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
 
-        .family-grid { display: flex; justify-content: space-between; text-align: left; font-size: 0.75rem; margin-bottom: 30px; line-height: 1.6; font-weight: 500;}
-        .memory-text { font-style: italic; font-size: 0.85rem; color: #777; padding: 15px 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; margin-bottom: 30px; }
-
-        /* RSVP Form */
-        .rsvp-form { text-align: left; }
-        .rsvp-form label { font-family: 'Montserrat'; font-size: 0.6rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.6; }
-        .rsvp-form input, .rsvp-form textarea {
-            width: 100%; border: none; border-bottom: 1px solid #ddd;
-            padding: 12px 0; font-family: 'Cormorant Garamond';
-            font-size: 1.4rem; outline: none; background: transparent;
-        }
-        .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: all 0.5s ease; }
-        .conditional-field.show { max-height: 100px; opacity: 1; margin-top: 10px; }
-
-        .submit-btn {
-            width: 100%; background: var(--terracotta); color: white;
-            border: none; padding: 20px; margin-top: 40px;
-            font-family: 'Montserrat'; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; cursor: pointer;
+        /* L'enveloppe recule et devient floue */
+        .opened.envelope-container {
+            transform: scale(0.7);
+            opacity: 0;
+            filter: blur(10px);
         }
 
-        .music-control-wrapper {
-            position: fixed; bottom: 25px; right: 25px; z-index: 2000;
-            display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.9);
-            padding: 8px 15px; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            cursor: pointer; border: 1px solid var(--terracotta);
-        }
-        .bar { width: 3px; background: var(--terracotta); height: 12px; }
-        .playing .bar { animation: eq 0.8s infinite alternate; }
-        @keyframes eq { 0% { height: 3px; } 100% { height: 15px; } }
     </style>
 </head>
 <body>
 
-    <audio id="bgMusic" loop><source src="musique.mp3" type="audio/mpeg"></audio>
+    <div class="flash-overlay" id="flash"></div>
 
-    <div class="music-control-wrapper" id="musicBtn" onclick="toggleMusic()">
-        <div style="display:flex; gap:2px;" class="eq-box"><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
-        <span style="font-family:Montserrat; font-size:0.6rem; color:var(--terracotta);" id="statusText">Music Off</span>
-    </div>
-
-    <svg id="svg-container" viewBox="0 0 100 1000" preserveAspectRatio="none">
-        <!-- Trajets invisibles -->
-        <path id="road-path" fill="none" stroke="none" d="M 50 0 C 10 150, 90 150, 50 300 S 10 450, 50 600 S 90 750, 50 900 S 10 1050, 50 1200" />
-    </svg>
-    <img id="car" src="voiture.png" alt="Mercedes S Class">
-
-    <div class="main-container">
+    <div class="main-wrapper">
         
-        <div class="static-envelope"><img src="logo.png"></div>
+        <div class="envelope-container" id="env" onclick="triggerOpening()">
+            <div class="seal"><img src="logo.png" alt="E&D"></div>
+            <div class="flap"></div>
+            <div class="envelope-body"></div>
+        </div>
 
-        <section class="luxury-card">
-            <img src="photo-mairie.webp" class="section-img">
-            <h2 class="royal-title">Mairie</h2>
-            <div class="details-luxe">
-                Nous serions ravis de vous compter parmi nous pour célébrer notre union qui sera suivie d'un <strong>vin d'honneur</strong>.<br><br>
-                <strong>Le jeudi 03 septembre 2026<br>à 15h30 précises</strong><br><br>
-                À la mairie de Neuilly-sur-Seine<br>
-                96 Av. Achille Peretti
-            </div>
-            <a href="https://waze.com/ul?q=96+Avenue+Achille+Peretti+Neuilly" class="btn-waze">Itinéraire Mairie</a>
-            
-            <div class="sep"></div>
-            
-            <div class="details-luxe">
-                La cérémonie sera suivie d'un henné à <strong>17h30</strong><br>
-                à l'<strong>ACCIL - Rooftop</strong><br>
-                63 rue Louis Rouquier, Levallois
-            </div>
-            <a href="https://waze.com/ul?q=63+Rue+Louis+Rouquier+Levallois" class="btn-waze">Itinéraire Rooftop</a>
-        </section>
-
-        <section class="luxury-card">
-            <img src="hebreu.png" class="hebrew-full">
-            <h2 class="royal-title">Houppa</h2>
-
-            <div class="family-grid">
-                <div>Mme Sophie Prajs<br>Mme Beatrice Philippe<br>Mme Nathalie Prajs & M. Eric Smadja<br>M et Mme Benjamin Philippe</div>
-                <div style="text-align: right;">Madame Sonia Krief</div>
-            </div>
-
-            <div class="memory-text">En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.</div>
-
-            <p style="font-size:1.1rem; opacity:0.8;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
-            <h1 class="royal-title" style="font-size: 3.5rem;">Emma & David</h1>
-
-            <div class="details-luxe">
-                La cérémonie religieuse sera célébrée le<br>
-                <strong>Dimanche 18 Octobre à 17h00 précises</strong><br><br>
-                Suivi de la réception au<br><strong>Grand Hôtel</strong><br>2 rue Scribe, Paris
-            </div>
-            <a href="https://waze.com/ul?q=2+rue+Scribe+Paris" class="btn-waze">Itinéraire Houppa</a>
-        </section>
-
-        <section class="luxury-card">
-            <img src="photo-marie.webp" class="section-img">
-            <h2 class="royal-title">Réponse</h2>
-            <div class="rsvp-form">
-                <form id="rsvpForm">
-                    <label>Nom & Prénom</label>
-                    <input type="text" required placeholder="Votre nom">
-                    
-                    <label>Présence Mairie ?</label>
-                    <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="m" onclick="toggleField('mairieField', true)" required> OUI</label>
-                        <label><input type="radio" name="m" onclick="toggleField('mairieField', false)"> NON</label>
-                    </div>
-                    <div id="mairieField" class="conditional-field"><label>Nombre de personnes (Mairie)</label><input type="number" min="1"></div>
-
-                    <label>Présence Houppa ?</label>
-                    <div style="display: flex; gap: 40px; margin-top: 15px; font-family: Montserrat; font-size: 0.9rem;">
-                        <label><input type="radio" name="h" onclick="toggleField('houppaField', true)" required> OUI</label>
-                        <label><input type="radio" name="h" onclick="toggleField('houppaField', false)"> NON</label>
-                    </div>
-                    <div id="houppaField" class="conditional-field"><label>Nombre de personnes (Houppa)</label><input type="number" min="1"></div>
-
-                    <label>Un petit mot pour nous ?</label>
-                    <textarea placeholder="Votre message..."></textarea>
-                    <button type="submit" class="submit-btn">Confirmer ma présence</button>
-                </form>
-            </div>
-        </section>
+        <div class="card" id="card">
+            <div class="couple-photo"></div>
+            <h2>Emma & David</h2>
+            <p>18 Octobre 2026</p>
+            <button class="btn-enter" onclick="goToInvitation()">Découvrir l'invitation</button>
+        </div>
 
     </div>
 
     <script>
-        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+        function triggerOpening() {
+            const env = document.getElementById('env');
+            const flash = document.getElementById('flash');
+            const card = document.getElementById('card');
 
-        // Mercedes Animation - Même trajet, commence à la Mairie, passe en dessous de chaque div, s'arrête à la fin de la page
-        gsap.to("#car", {
-            scrollTrigger: { trigger: ".luxury-card:first-of-type", start: "top center", end: "bottom bottom", scrub: 0.8 },
-            motionPath: { path: "#road-path", align: "#road-path", autoRotate: true, alignOrigin: [0.5, 0.5] },
-            scale: 2, // Voiture double de taille pendant le scroll
-            opacity: 1, // Apparition de la voiture
-            y: 0, // Translation pour l'effet d'entrée
-            ease: "power2.out"
-        });
+            // 1. On ouvre le rabat
+            env.classList.add('opened');
 
-        // Contenu Fade & Slide
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-        document.querySelectorAll('.luxury-card').forEach(card => observer.observe(card));
-
-        // Musique
-        const music = document.getElementById('bgMusic');
-        function toggleMusic() {
-            if (music.paused) { music.play(); document.getElementById('musicBtn').classList.add('playing'); document.getElementById('statusText').innerText="Music On"; }
-            else { music.pause(); document.getElementById('musicBtn').classList.remove('playing'); document.getElementById('statusText').innerText="Music Off"; }
+            // 2. Le flash se produit quand le rabat est ouvert
+            setTimeout(() => {
+                flash.classList.add('show-flash');
+                
+                // 3. On affiche la carte et on fait disparaître l'enveloppe pendant le flash
+                setTimeout(() => {
+                    document.body.classList.add('reveal-card');
+                }, 150);
+            }, 500);
         }
 
-        function toggleField(id, show) {
-            const field = document.getElementById(id);
-            show ? field.classList.add('show') : field.classList.remove('show');
+        function goToInvitation() {
+            // Effet de sortie vers la page de détails
+            document.getElementById('card').style.transform = "translate(-50%, -150%) scale(0.8)";
+            document.getElementById('card').style.opacity = "0";
+            
+            setTimeout(() => {
+                window.location.href = "premiere-page.html";
+            }, 600);
         }
     </script>
 </body>
