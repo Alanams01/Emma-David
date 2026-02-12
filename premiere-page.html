@@ -15,7 +15,8 @@
             --terracotta: #b05d3e; 
             --bg: #f7f3f0; 
             --paper: #ffffff;
-            --text: #3d3530;
+            /* Couleur de police harmonisée sur le Emma & David */
+            --text: #b05d3e; 
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -54,9 +55,11 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .hebrew-full { width: 100%; height: auto; margin-bottom: 15px; }
+        .hebrew-full { 
+            width: 100%; height: auto; margin-bottom: 15px; 
+            filter: sepia(1) saturate(0.5) hue-rotate(330deg); /* Teinte l'image hébreu en terracotta */
+        }
         
-        /* Styles calligraphie marron */
         .mairie-names { 
             font-family: 'Great Vibes'; 
             color: var(--terracotta); 
@@ -107,18 +110,40 @@
         .family-left { flex: 1.2; }
         .family-right { flex: 0.8; text-align: right; }
         
-        .memory-text { font-style: italic; font-size: 0.9rem; color: #666; padding: 15px 0; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; margin-bottom: 30px; }
+        .memory-text { 
+            font-style: italic; 
+            font-size: 0.9rem; 
+            color: var(--text); 
+            padding: 15px 0; 
+            border-top: 1px solid rgba(176, 93, 62, 0.2); 
+            border-bottom: 1px solid rgba(176, 93, 62, 0.2); 
+            margin-bottom: 30px; 
+            opacity: 0.9;
+        }
 
         .rsvp-form { text-align: left; }
-        .rsvp-form label.main-label { font-family: 'Montserrat'; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-top: 25px; opacity: 0.8; font-weight: 600; }
-        .rsvp-form input[type="text"], .rsvp-form input[type="number"], .rsvp-form textarea {
-            width: 100%; border: none; border-bottom: 1px solid #ddd;
+        .rsvp-form label.main-label { 
+            font-family: 'Montserrat'; 
+            font-size: 0.7rem; 
+            letter-spacing: 2px; 
+            text-transform: uppercase; 
+            display: block; 
+            margin-top: 25px; 
+            color: var(--text);
+            font-weight: 600; 
+        }
+        .rsvp-form input[type="text"], 
+        .rsvp-form input[type="number"], 
+        .rsvp-form textarea {
+            width: 100%; border: none; 
+            border-bottom: 1px solid rgba(176, 93, 62, 0.4);
             padding: 10px 0; font-family: 'Cormorant Garamond';
             font-size: 1.4rem; outline: none; background: transparent;
+            color: var(--text);
         }
         
         .radio-group { display: flex; gap: 20px; margin-top: 10px; font-family: 'Montserrat'; font-size: 0.85rem; }
-        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 400; }
+        .radio-group label { cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 400; color: var(--text); }
 
         .conditional-field { max-height: 0; overflow: hidden; opacity: 0; transition: 0.4s ease-out; }
         .conditional-field.show { max-height: 120px; opacity: 1; margin-top: 10px; }
@@ -193,7 +218,7 @@
                 En la mémoire de nos chers grands-parents<br>Albert Prajs, Didier Philippe, Haya et Fradji Krief.
             </div>
 
-            <p style="font-size:1.1rem; opacity:0.8; font-style: italic;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
+            <p style="font-size:1.1rem; opacity:0.9; font-style: italic;">Ont la joie de vous faire part du mariage de leurs enfants et leurs petits-enfants</p>
             
             <h1 class="royal-title names-main">Emma & David</h1>
 
