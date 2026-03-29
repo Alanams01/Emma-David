@@ -231,45 +231,45 @@
         </section>
 
         <section class="luxury-card">
-            <h2 class="royal-title section-title">Réponse</h2>
+            <h2 class="royal-title section-title">réponse</h2>
             <img src="photo-marie.webp" class="section-img">
             <div class="rsvp-form">
                 <form id="rsvpForm">
                     <input type="text" name="honeypot" style="display:none !important" tabindex="-1" autocomplete="off">
-                    <label class="main-label">Nom & Prénom</label>
+                    <label class="main-label">nom & prénom</label>
                     <input type="text" name="nom" required placeholder="Votre nom">
                     
-                    <label class="main-label">Présent à la mairie ?</label>
+                    <label class="main-label">présent à la mairie ?</label>
                     <div class="radio-group">
                         <label><input type="radio" name="mairie" value="OUI" onclick="toggleField('mf', true)" required> OUI</label>
                         <label><input type="radio" name="mairie" value="NON" onclick="toggleField('mf', false)"> NON</label>
                     </div>
                     <div id="mf" class="conditional-field">
-                        <label class="main-label">Nombre de personnes (Mairie)</label>
+                        <label class="main-label">nombre de personnes (Mairie)</label>
                         <input type="number" name="nb_mairie" min="1">
                     </div>
 
-                    <label class="main-label">Présent au Henné ?</label>
+                    <label class="main-label">présent au Henné ?</label>
                     <div class="radio-group">
                         <label><input type="radio" name="henne" value="OUI" onclick="toggleField('hef', true)" required> OUI</label>
                         <label><input type="radio" name="henne" value="NON" onclick="toggleField('hef', false)"> NON</label>
                     </div>
                     <div id="hef" class="conditional-field">
-                        <label class="main-label">Nombre de personnes (Henné)</label>
+                        <label class="main-label">nombre de personnes (Henné)</label>
                         <input type="number" name="nb_henne" min="1">
                     </div>
 
-                    <label class="main-label">Présent à la Houppa ?</label>
+                    <label class="main-label">présent à la Houppa ?</label>
                     <div class="radio-group">
                         <label><input type="radio" name="houppa" value="OUI" onclick="toggleField('hf', true)" required> OUI</label>
                         <label><input type="radio" name="houppa" value="NON" onclick="toggleField('hf', false)"> NON</label>
                     </div>
                     <div id="hf" class="conditional-field">
-                        <label class="main-label">Nombre de personnes (Houppa)</label>
+                        <label class="main-label">nombre de personnes (Houppa)</label>
                         <input type="number" name="nb_houppa" min="1">
                     </div>
 
-                    <label class="main-label">Un petit mot pour nous ?</label>
+                    <label class="main-label">un petit mot pour nous ?</label>
                     <textarea name="message" placeholder="Votre message..."></textarea>
                     
                     <button type="submit" id="submitBtn" class="submit-btn">Confirmer</button>
